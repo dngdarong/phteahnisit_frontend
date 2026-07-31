@@ -1,0 +1,48 @@
+{
+  "nav": {
+    "home": "Home",
+    "myRooms": "My rooms",
+    "postRoom": "Post a room",
+    "pendingApprovals": "Pending approvals",
+    "users": "Users",
+    "profile": "Profile",
+    "login": "Log in",
+    "logout": "Log out",
+    "registerStudent": "Sign up as student",
+    "registerLandlord": "Sign up as landlord"
+  },
+  "room": {
+    "price": "Price",
+    "province": "Province",
+    "district": "District",
+    "roomType": "Room type",
+    "available": "Available",
+    "unavailable": "Currently rented",
+    "contactLandlord": "Contact landlord",
+    "noResults": "No rooms found",
+    "noResultsHint": "Try a different province, price range, or room type.",
+    "status": {
+      "pending": "Pending review",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    }
+  },
+  "auth": {
+    "name": "Full name",
+    "email": "Email",
+    "phone": "Phone number",
+    "password": "Password",
+    "passwordConfirm": "Confirm password",
+    "loginTitle": "Log in to your account",
+    "loginSuccess": "Welcome back.",
+    "registerSuccess": "Account created. You can now log in."
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "submit": "Submit"
+  }
+}

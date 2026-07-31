@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+/*
+  Design tokens for phteahnisit.
+  Palette: soft green + white, per the project's design brief.
+  Chosen as a real green scale (not Tailwind's default green-500) so
+  the brand reads intentional rather than templated - leans slightly
+  toward sage/moss rather than a saturated "go" green, to feel calm
+  and residential rather than transactional.
+
+  Type: Hanuman (Khmer-capable, humanist, warm) paired with Be Vietnam
+  Pro (geometric, friendly, wide Southeast-Asian language support) for
+  Latin text. Both are free and render Khmer script correctly, which
+  most default Latin-only pairings (Inter, system-ui) do not.
+*/
+@import url('https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap');
+
+@theme {
+  --font-sans: 'Be Vietnam Pro', 'Hanuman', ui-sans-serif, system-ui, sans-serif;
+  --font-khmer: 'Hanuman', 'Be Vietnam Pro', sans-serif;
+
+  --color-brand-50: #f2f8f3;
+  --color-brand-100: #dfeee1;
+  --color-brand-200: #bcdcc0;
+  --color-brand-300: #8fc397;
+  --color-brand-400: #62a76c;
+  --color-brand-500: #438a4e;
+  --color-brand-600: #326e3c;
+  --color-brand-700: #285731;
+  --color-brand-800: #21462a;
+  --color-brand-900: #1c3a24;
+
+  --color-status-pending: #b7791f;
+  --color-status-pending-bg: #fdf3e0;
+  --color-status-approved: #326e3c;
+  --color-status-approved-bg: #f2f8f3;
+  --color-status-rejected: #b0393b;
+  --color-status-rejected-bg: #fbe9e9;
+
+  --radius-card: 1rem;
+}
+
+html {
+  font-family: var(--font-sans);
+}
+
+/* Khmer text (labels, locale-driven content) switches to the Khmer-first stack. */
+[lang='km'] {
+  font-family: var(--font-khmer);
+}
+
+body {
+  @apply bg-white text-brand-900 antialiased;
+}
+
+/* Consistent focus ring across the app - accessibility floor from the design skill. */
+:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
