@@ -8,6 +8,9 @@ export default {
   detail(id) {
     return api.get(`/rooms/${id}`)
   },
+  map(params) {
+    return api.get('/rooms/map', { params })
+  },
 
   // Landlord
   mine(params) {

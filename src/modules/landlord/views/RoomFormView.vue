@@ -29,6 +29,8 @@ const form = reactive({
   district: '',
   commune: '',
   address: '',
+  latitude: null,
+  longitude: null,
   room_type: 'single_room',
   available: true,
 })
@@ -62,6 +64,8 @@ async function loadExisting() {
       district: room.district,
       commune: room.commune,
       address: room.address,
+      latitude: room.latitude,
+      longitude: room.longitude,
       room_type: room.room_type,
       available: room.available,
     })
@@ -170,6 +174,20 @@ onMounted(() => {
         <InputText v-model="form.address" class="w-full" required />
         <small v-if="errors.address" class="text-status-rejected">{{ errors.address[0] }}</small>
       </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.latitude') }}</label>
+          <InputNumber v-model="form.latitude" class="w-full" :min-fraction-digits="0" :max-fraction-digits="7" :min="-90" :max="90" />
+          <small v-if="errors.latitude" class="text-status-rejected">{{ errors.latitude[0] }}</small>
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.longitude') }}</label>
+          <InputNumber v-model="form.longitude" class="w-full" :min-fraction-digits="0" :max-fraction-digits="7" :min="-180" :max="180" />
+          <small v-if="errors.longitude" class="text-status-rejected">{{ errors.longitude[0] }}</small>
+        </div>
+      </div>
+      <p class="-mt-2 text-xs text-brand-500">{{ t('room.locationHint') }}</p>
 
       <div class="flex items-center gap-3">
         <ToggleSwitch v-model="form.available" />

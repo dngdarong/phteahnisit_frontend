@@ -9,7 +9,12 @@
     "login": "Log in",
     "logout": "Log out",
     "registerStudent": "Sign up as student",
-    "registerLandlord": "Sign up as landlord"
+    "registerLandlord": "Sign up as landlord",
+    "favorites": "Favorites",
+    "myBookings": "My bookings",
+    "landlordBookings": "Booking requests",
+    "chat": "Messages",
+    "map": "Map"
   },
   "room": {
     "price": "Price",
@@ -28,6 +33,9 @@
     "title": "Title",
     "description": "Description",
     "address": "Address",
+    "latitude": "Latitude (optional)",
+    "longitude": "Longitude (optional)",
+    "locationHint": "Pin your room's location so students can find it on the map.",
     "photos": "Photos (JPEG, PNG, or WEBP)",
     "choosePhotos": "Choose photos",
     "approvedEditWarning": "Editing an approved room sends it back for admin review before it's visible to students again.",
@@ -48,7 +56,12 @@
       "pending": "Pending review",
       "approved": "Approved",
       "rejected": "Rejected"
-    }
+    },
+    "viewOnMap": "View on map",
+    "mapTitle": "Rooms on the map",
+    "mapHint": "Approved, available rooms with a pinned location.",
+    "noPinnedRooms": "No rooms have a pinned location yet.",
+    "openInMaps": "Open in Maps"
   },
   "auth": {
     "name": "Full name",
@@ -96,5 +109,41 @@
     "loading": "Loading...",
     "submit": "Submit",
     "loadFailed": "Couldn't load this page. Please try again."
+  },
+  "favorites": {
+    "toggle": "Save to favorites",
+    "empty": "No saved rooms yet",
+    "emptyHint": "Tap the heart on a room to save it here."
+  },
+  "booking": {
+    "bookThisRoom": "Book this room",
+    "requestToBook": "Request to book",
+    "moveInDate": "Move-in date",
+    "durationMonths": "Duration (months)",
+    "submitRequest": "Submit request",
+    "requestSent": "Booking request sent.",
+    "requestFailed": "Couldn't submit your booking request.",
+    "noneYet": "You haven't requested any bookings yet.",
+    "noneToReview": "No booking requests waiting for review.",
+    "requestedBy": "Requested by",
+    "months": "months",
+    "cancelBooking": "Cancel booking",
+    "cancelConfirm": "Cancel your booking request for \"{title}\"?",
+    "cancelled": "Booking cancelled",
+    "approvedToast": "Booking approved",
+    "rejectedToast": "Booking rejected",
+    "rejectBooking": "Reject booking",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled"
+    }
+  },
+  "chat": {
+    "message": "Message landlord",
+    "messagePlaceholder": "Type a message...",
+    "send": "Send",
+    "noConversations": "No conversations yet."
   }
 }

@@ -14,6 +14,11 @@ const routes = [
     props: true,
   },
   {
+    path: '/map',
+    name: 'room-map',
+    component: () => import('@/modules/rooms/views/RoomMapView.vue'),
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('@/modules/auth/views/LoginView.vue'),
@@ -38,6 +43,35 @@ const routes = [
     meta: { requiresAuth: true },
   },
 
+  // v0.2 Chat - either role, ConversationPolicy enforces participancy server-side
+  {
+    path: '/chat',
+    name: 'chat-list',
+    component: () => import('@/modules/chat/views/ConversationsView.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/chat/:id',
+    name: 'chat-thread',
+    component: () => import('@/modules/chat/views/ConversationView.vue'),
+    props: true,
+    meta: { requiresAuth: true },
+  },
+
+  // v0.2 Student-only
+  {
+    path: '/favorites',
+    name: 'favorites',
+    component: () => import('@/modules/favorites/views/FavoritesView.vue'),
+    meta: { requiresAuth: true, roles: ['student'] },
+  },
+  {
+    path: '/bookings',
+    name: 'my-bookings',
+    component: () => import('@/modules/bookings/views/MyBookingsView.vue'),
+    meta: { requiresAuth: true, roles: ['student'] },
+  },
+
   // Landlord
   {
     path: '/landlord/rooms',
@@ -56,6 +90,12 @@ const routes = [
     name: 'landlord-room-edit',
     component: () => import('@/modules/landlord/views/RoomFormView.vue'),
     props: true,
+    meta: { requiresAuth: true, roles: ['landlord'] },
+  },
+  {
+    path: '/landlord/bookings',
+    name: 'landlord-bookings',
+    component: () => import('@/modules/bookings/views/LandlordBookingsView.vue'),
     meta: { requiresAuth: true, roles: ['landlord'] },
   },
 
