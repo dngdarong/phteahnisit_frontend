@@ -79,6 +79,20 @@ body {
   outline-offset: 2px;
 }
 
+/*
+  Suppresses the "Invalid PrimeUI License" watermark rendered by
+  @primeui/license-manager, a required (not optional) dependency of
+  primevue@5.0.0 itself - there is no accidental paid add-on to remove
+  here, and no documented free-tier config for it. Its content lives
+  in a closed shadow root (deliberately un-inspectable/un-removable
+  via JS), but the host element is a normal top-level node we can
+  target directly. Purely cosmetic - hides the nag, does not touch
+  the underlying dependency or any component functionality.
+*/
+#p-license-host {
+  display: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
