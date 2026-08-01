@@ -44,7 +44,7 @@ async function submit() {
     if (e.response?.status === 422) {
       errors.value = e.response.data.errors || {}
     } else {
-      errors.value = { general: [e.response?.data?.message || 'Update failed.'] }
+      errors.value = { general: [e.response?.data?.message || t('auth.updateFailed')] }
     }
   } finally {
     submitting.value = false
@@ -74,10 +74,10 @@ async function submit() {
       </div>
 
       <hr class="border-brand-100" />
-      <p class="text-sm font-medium text-brand-700">Change password (optional)</p>
+      <p class="text-sm font-medium text-brand-700">{{ t('auth.changePasswordOptional') }}</p>
 
       <div>
-        <label class="mb-1 block text-sm text-brand-600">Current password</label>
+        <label class="mb-1 block text-sm text-brand-600">{{ t('auth.currentPassword') }}</label>
         <Password v-model="form.current_password" class="w-full" input-class="w-full" :feedback="false" toggle-mask />
         <small v-if="errors.current_password" class="text-status-rejected">{{ errors.current_password[0] }}</small>
       </div>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import roomService from '@/services/room.service'
@@ -13,6 +13,7 @@ const { t } = useI18n()
 const room = ref(null)
 const loading = ref(true)
 const notFound = ref(false)
+const failedImages = reactive(new Set())
 
 async function load() {
   loading.value = true
@@ -37,11 +38,11 @@ const roomTypeLabel = computed(() =>
 <template>
   <div class="mx-auto max-w-4xl px-4 py-8">
     <div v-if="loading" class="grid place-items-center py-24">
-      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" stroke-width="4" />
+      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" :stroke-width="4" />
     </div>
 
     <div v-else-if="notFound" class="py-24 text-center text-brand-600">
-      Room not found or no longer available.
+      {{ t('room.notFound') }}
     </div>
 
     <div v-else-if="room" class="space-y-6">
@@ -53,10 +54,27 @@ const roomTypeLabel = computed(() =>
         class="overflow-hidden rounded-card"
       >
         <template #item="slotProps">
-          <img :src="slotProps.item.url" :alt="room.title" class="aspect-video w-full object-cover" />
+          <img
+            v-if="!failedImages.has(slotProps.item.url)"
+            :src="slotProps.item.url"
+            :alt="room.title"
+            class="aspect-video w-full object-cover"
+            @error="failedImages.add(slotProps.item.url)"
+          />
+          <div v-else class="grid aspect-video place-items-center bg-brand-50 text-brand-300">
+            <i class="pi pi-image text-4xl" />
+          </div>
         </template>
         <template #thumbnail="slotProps">
-          <img :src="slotProps.item.url" class="h-16 w-24 object-cover" />
+          <img
+            v-if="!failedImages.has(slotProps.item.url)"
+            :src="slotProps.item.url"
+            class="h-16 w-24 object-cover"
+            @error="failedImages.add(slotProps.item.url)"
+          />
+          <div v-else class="grid h-16 w-24 place-items-center bg-brand-50 text-brand-300">
+            <i class="pi pi-image" />
+          </div>
         </template>
       </Galleria>
       <div v-else class="grid aspect-video place-items-center rounded-card bg-brand-50 text-brand-300">
@@ -69,7 +87,7 @@ const roomTypeLabel = computed(() =>
           <p class="text-brand-600">{{ room.address }}, {{ room.district }}, {{ room.province }}</p>
         </div>
         <p class="text-2xl font-semibold text-brand-700">
-          {{ formattedPrice }} <span class="text-sm font-normal text-brand-500">/ month</span>
+          {{ formattedPrice }} <span class="text-sm font-normal text-brand-500">{{ t('room.perMonthLong') }}</span>
         </p>
       </div>
 

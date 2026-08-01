@@ -12,6 +12,7 @@ import ToggleSwitch from 'primevue/toggleswitch'
 import FileUpload from 'primevue/fileupload'
 import Button from 'primevue/button'
 import Message from 'primevue/message'
+import ProgressSpinner from 'primevue/progressspinner'
 
 const props = defineProps({ id: { type: [String, Number], default: null } })
 const isEdit = computed(() => !!props.id)
@@ -34,6 +35,7 @@ const form = reactive({
 const newImages = ref([])
 const errors = ref({})
 const submitting = ref(false)
+const loadingExisting = ref(false)
 const wasApproved = ref(false)
 
 const provinces = [
@@ -48,20 +50,28 @@ const roomTypes = [
 ]
 
 async function loadExisting() {
-  const { data } = await roomService.detail(props.id)
-  const room = data.data ?? data
-  Object.assign(form, {
-    title: room.title,
-    description: room.description,
-    price: Number(room.price),
-    province: room.province,
-    district: room.district,
-    commune: room.commune,
-    address: room.address,
-    room_type: room.room_type,
-    available: room.available,
-  })
-  wasApproved.value = room.status === 'approved'
+  loadingExisting.value = true
+  try {
+    const { data } = await roomService.detail(props.id)
+    const room = data.data ?? data
+    Object.assign(form, {
+      title: room.title,
+      description: room.description,
+      price: Number(room.price),
+      province: room.province,
+      district: room.district,
+      commune: room.commune,
+      address: room.address,
+      room_type: room.room_type,
+      available: room.available,
+    })
+    wasApproved.value = room.status === 'approved'
+  } catch (e) {
+    toast.add({ severity: 'error', summary: t('room.loadFailed'), life: 4000 })
+    router.push({ name: 'landlord-rooms' })
+  } finally {
+    loadingExisting.value = false
+  }
 }
 
 function onFilesSelect(e) {
@@ -93,7 +103,7 @@ async function submit() {
     if (e.response?.status === 422) {
       errors.value = e.response.data.errors || {}
     } else {
-      errors.value = { general: [e.response?.data?.message || 'Something went wrong.'] }
+      errors.value = { general: [e.response?.data?.message || t('room.saveFailed')] }
     }
   } finally {
     submitting.value = false
@@ -111,23 +121,27 @@ onMounted(() => {
       {{ isEdit ? t('common.edit') : t('nav.postRoom') }}
     </h1>
     <Message v-if="isEdit && wasApproved" severity="warn" :closable="false" class="mb-4">
-      Editing an approved room sends it back for admin review before it's visible to students again.
+      {{ t('room.approvedEditWarning') }}
     </Message>
 
-    <form class="space-y-4" @submit.prevent="submit">
+    <div v-if="loadingExisting" class="grid place-items-center py-24">
+      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" :stroke-width="4" />
+    </div>
+
+    <form v-else class="space-y-4" @submit.prevent="submit">
       <div>
-        <label class="mb-1 block text-sm font-medium text-brand-700">Title</label>
+        <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.title') }}</label>
         <InputText v-model="form.title" class="w-full" required />
         <small v-if="errors.title" class="text-status-rejected">{{ errors.title[0] }}</small>
       </div>
 
       <div>
-        <label class="mb-1 block text-sm font-medium text-brand-700">Description</label>
+        <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.description') }}</label>
         <Textarea v-model="form.description" class="w-full" rows="4" required />
         <small v-if="errors.description" class="text-status-rejected">{{ errors.description[0] }}</small>
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.price') }} (USD/mo)</label>
           <InputNumber v-model="form.price" class="w-full" mode="currency" currency="USD" :min="0.01" required />
@@ -139,7 +153,7 @@ onMounted(() => {
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.province') }}</label>
           <Select v-model="form.province" :options="provinces" class="w-full" required />
@@ -152,7 +166,7 @@ onMounted(() => {
       </div>
 
       <div>
-        <label class="mb-1 block text-sm font-medium text-brand-700">Address</label>
+        <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.address') }}</label>
         <InputText v-model="form.address" class="w-full" required />
         <small v-if="errors.address" class="text-status-rejected">{{ errors.address[0] }}</small>
       </div>
@@ -163,13 +177,13 @@ onMounted(() => {
       </div>
 
       <div>
-        <label class="mb-1 block text-sm font-medium text-brand-700">Photos (JPEG, PNG, or WEBP)</label>
+        <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.photos') }}</label>
         <FileUpload
           mode="basic"
           multiple
           accept="image/jpeg,image/png,image/webp"
           :auto="false"
-          choose-label="Choose photos"
+          :choose-label="t('room.choosePhotos')"
           @select="onFilesSelect"
         />
         <small v-if="errors.images" class="text-status-rejected">{{ errors.images[0] }}</small>

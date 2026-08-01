@@ -21,6 +21,29 @@
     "contactLandlord": "Contact landlord",
     "noResults": "No rooms found",
     "noResultsHint": "Try a different province, price range, or room type.",
+    "searchPlaceholder": "Search by title or description",
+    "perMonthShort": "/ mo",
+    "perMonthLong": "/ month",
+    "notFound": "Room not found or no longer available.",
+    "title": "Title",
+    "description": "Description",
+    "address": "Address",
+    "photos": "Photos (JPEG, PNG, or WEBP)",
+    "choosePhotos": "Choose photos",
+    "approvedEditWarning": "Editing an approved room sends it back for admin review before it's visible to students again.",
+    "saveFailed": "Something went wrong.",
+    "loadFailed": "Couldn't load that room.",
+    "deleteConfirm": "Delete \"{title}\"? This can't be undone from here.",
+    "deleted": "Room deleted",
+    "postFirstHint": "Post your first room to get started.",
+    "noneWaiting": "Nothing waiting for review.",
+    "approve": "Approve",
+    "reject": "Reject",
+    "rejectListing": "Reject listing",
+    "rejectReasonHint": "Optional: give the landlord a reason.",
+    "approvedToast": "{title} approved",
+    "rejectedToast": "{title} rejected",
+    "owner": "Owner",
     "status": {
       "pending": "Pending review",
       "approved": "Approved",
@@ -35,7 +58,35 @@
     "passwordConfirm": "Confirm password",
     "loginTitle": "Log in to your account",
     "loginSuccess": "Welcome back.",
-    "registerSuccess": "Account created. You can now log in."
+    "loginFailed": "Login failed. Check your credentials.",
+    "registerSuccess": "Account created. You can now log in.",
+    "updateFailed": "Update failed.",
+    "changePasswordOptional": "Change password (optional)",
+    "currentPassword": "Current password"
+  },
+  "admin": {
+    "allRoles": "All roles",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "role": "Role",
+    "status": "Status",
+    "disable": "Disable",
+    "enable": "Enable",
+    "updated": "Updated",
+    "disableConfirm": "Disable {name}? They won't be able to log in.",
+    "enableConfirm": "Re-enable {name}?",
+    "disableUser": "Disable user",
+    "enableUser": "Enable user",
+    "roles": {
+      "student": "Student",
+      "landlord": "Landlord",
+      "admin": "Admin"
+    },
+    "statuses": {
+      "active": "Active",
+      "inactive": "Inactive"
+    }
   },
   "common": {
     "save": "Save",
@@ -43,6 +94,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "loading": "Loading...",
-    "submit": "Submit"
+    "submit": "Submit",
+    "loadFailed": "Couldn't load this page. Please try again."
   }
 }
