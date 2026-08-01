@@ -35,9 +35,14 @@ function statusLabel(status) {
 
 async function load() {
   loading.value = true
-  const { data } = await userService.list({ role: roleFilter.value })
-  users.value = data.data
-  loading.value = false
+  try {
+    const { data } = await userService.list({ role: roleFilter.value })
+    users.value = data.data
+  } catch (e) {
+    toast.add({ severity: 'error', summary: t('common.loadFailed'), life: 4000 })
+  } finally {
+    loading.value = false
+  }
 }
 
 function toggleStatus(user) {

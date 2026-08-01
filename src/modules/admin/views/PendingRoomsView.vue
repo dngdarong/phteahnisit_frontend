@@ -19,9 +19,14 @@ const rejectReason = ref('')
 
 async function load() {
   loading.value = true
-  const { data } = await roomService.pending()
-  rooms.value = data.data
-  loading.value = false
+  try {
+    const { data } = await roomService.pending()
+    rooms.value = data.data
+  } catch (e) {
+    toast.add({ severity: 'error', summary: t('common.loadFailed'), life: 4000 })
+  } finally {
+    loading.value = false
+  }
 }
 
 async function approve(room) {

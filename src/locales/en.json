@@ -94,6 +94,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "loading": "Loading...",
-    "submit": "Submit"
+    "submit": "Submit",
+    "loadFailed": "Couldn't load this page. Please try again."
   }
 }
