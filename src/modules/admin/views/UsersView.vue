@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
@@ -18,12 +18,20 @@ const users = ref([])
 const loading = ref(true)
 const roleFilter = ref(null)
 
-const roleOptions = [
-  { label: 'All roles', value: null },
-  { label: 'Student', value: 'student' },
-  { label: 'Landlord', value: 'landlord' },
-  { label: 'Admin', value: 'admin' },
-]
+const roleOptions = computed(() => [
+  { label: t('admin.allRoles'), value: null },
+  { label: t('admin.roles.student'), value: 'student' },
+  { label: t('admin.roles.landlord'), value: 'landlord' },
+  { label: t('admin.roles.admin'), value: 'admin' },
+])
+
+function roleLabel(role) {
+  return t(`admin.roles.${role}`)
+}
+
+function statusLabel(status) {
+  return t(`admin.statuses.${status}`)
+}
 
 async function load() {
   loading.value = true
@@ -35,12 +43,12 @@ async function load() {
 function toggleStatus(user) {
   const isActive = user.status === 'active'
   confirm.require({
-    message: isActive ? `Disable ${user.name}? They won't be able to log in.` : `Re-enable ${user.name}?`,
-    header: isActive ? 'Disable user' : 'Enable user',
+    message: isActive ? t('admin.disableConfirm', { name: user.name }) : t('admin.enableConfirm', { name: user.name }),
+    header: isActive ? t('admin.disableUser') : t('admin.enableUser'),
     acceptClass: isActive ? 'p-button-danger' : undefined,
     accept: async () => {
       await (isActive ? userService.disable(user.id) : userService.enable(user.id))
-      toast.add({ severity: 'success', summary: 'Updated', life: 2500 })
+      toast.add({ severity: 'success', summary: t('admin.updated'), life: 2500 })
       load()
     },
   })
@@ -57,23 +65,23 @@ onMounted(load)
     </div>
 
     <DataTable :value="users" :loading="loading" paginator :rows="15" class="rounded-card overflow-hidden">
-      <Column field="name" header="Name" />
-      <Column field="email" header="Email" />
-      <Column field="phone" header="Phone" />
-      <Column field="role" header="Role">
+      <Column field="name" :header="t('admin.name')" />
+      <Column field="email" :header="t('admin.email')" />
+      <Column field="phone" :header="t('admin.phone')" />
+      <Column field="role" :header="t('admin.role')">
         <template #body="{ data }">
-          <Tag :value="data.role" severity="secondary" />
+          <Tag :value="roleLabel(data.role)" severity="secondary" />
         </template>
       </Column>
-      <Column field="status" header="Status">
+      <Column field="status" :header="t('admin.status')">
         <template #body="{ data }">
-          <Tag :value="data.status" :severity="data.status === 'active' ? 'success' : 'danger'" />
+          <Tag :value="statusLabel(data.status)" :severity="data.status === 'active' ? 'success' : 'danger'" />
         </template>
       </Column>
       <Column header="">
         <template #body="{ data }">
           <Button
-            :label="data.status === 'active' ? 'Disable' : 'Enable'"
+            :label="data.status === 'active' ? t('admin.disable') : t('admin.enable')"
             size="small"
             :severity="data.status === 'active' ? 'danger' : 'success'"
             outlined

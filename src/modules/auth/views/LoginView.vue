@@ -27,7 +27,7 @@ async function submit() {
     toast.add({ severity: 'success', summary: t('auth.loginSuccess'), life: 3000 })
     router.push(route.query.redirect || { name: 'home' })
   } catch (e) {
-    error.value = e.response?.data?.message || 'Login failed. Check your credentials.'
+    error.value = e.response?.data?.message || t('auth.loginFailed')
   } finally {
     loading.value = false
   }

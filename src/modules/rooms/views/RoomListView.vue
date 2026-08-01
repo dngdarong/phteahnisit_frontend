@@ -67,13 +67,13 @@ onMounted(load)
   <div class="mx-auto max-w-6xl px-4 py-8">
     <div class="mb-6 flex flex-col gap-3 sm:flex-row">
       <span class="flex-1">
-        <InputText v-model="filters.keyword" class="w-full" placeholder="Search by title or description" />
+        <InputText v-model="filters.keyword" class="w-full" :placeholder="t('room.searchPlaceholder')" />
       </span>
       <Select
         v-model="filters.province"
         :options="provinces"
         show-clear
-        placeholder="Province"
+        :placeholder="t('room.province')"
         class="w-full sm:w-48"
       />
       <Select
@@ -82,13 +82,13 @@ onMounted(load)
         option-label="label"
         option-value="value"
         show-clear
-        placeholder="Room type"
+        :placeholder="t('room.roomType')"
         class="w-full sm:w-48"
       />
     </div>
 
     <div v-if="loading" class="grid place-items-center py-20">
-      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" stroke-width="4" />
+      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" :stroke-width="4" />
     </div>
 
     <div v-else-if="rooms.length === 0" class="rounded-card border border-dashed border-brand-200 py-16 text-center">

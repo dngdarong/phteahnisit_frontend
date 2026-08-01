@@ -26,13 +26,13 @@ async function load() {
 
 function confirmDelete(room) {
   confirm.require({
-    message: `Delete "${room.title}"? This can't be undone from here.`,
+    message: t('room.deleteConfirm', { title: room.title }),
     header: t('common.delete'),
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',
     accept: async () => {
       await roomService.remove(room.id)
-      toast.add({ severity: 'success', summary: 'Room deleted', life: 3000 })
+      toast.add({ severity: 'success', summary: t('room.deleted'), life: 3000 })
       load()
     },
   })
@@ -49,12 +49,12 @@ onMounted(load)
     </div>
 
     <div v-if="loading" class="grid place-items-center py-20">
-      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" stroke-width="4" />
+      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" :stroke-width="4" />
     </div>
 
     <div v-else-if="rooms.length === 0" class="rounded-card border border-dashed border-brand-200 py-16 text-center">
       <p class="font-medium text-brand-800">{{ t('room.noResults') }}</p>
-      <p class="text-sm text-brand-500">Post your first room to get started.</p>
+      <p class="text-sm text-brand-500">{{ t('room.postFirstHint') }}</p>
     </div>
 
     <div v-else class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
