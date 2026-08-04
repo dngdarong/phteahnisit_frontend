@@ -1,4 +1,4 @@
-# phteahnisit — Frontend (v0.1 MVP)
+# phteahnisit — Frontend (v0.1 MVP + v0.2, hardened through Phase 5)
 
 ## 1. Setup
 
@@ -100,16 +100,38 @@ approved→edit→pending warning from the business rules), admin pending-
 queue approve/reject, admin user list with disable/enable, and a
 profile page with optional password change.
 
-Not built (out of v0.1 scope per every spec doc's "Future
-Compatibility" section): favorites, booking, chat, notifications,
-reviews, ratings, maps, payments — no UI scaffolding for any of these
-exists, intentionally.
+v0.2 additionally built: favorites (toggle from `RoomCard`/room
+detail), bookings (student request/cancel, landlord approve/reject),
+chat (per-room conversation threads, polling-based), and a room map
+(pin-list linking out to Google Maps). See
+`docs/FRONTEND_ARCHITECTURE.md` section 8 for the full breakdown.
+Payments, reviews/ratings, and a standalone notifications system
+remain out of scope — no UI scaffolding for any of these exists.
 
-## 7. Known gaps to close before this ships
+## 7. Hardening (Phases 1–5)
+
+Post-v0.2 hardening pass, no UI redesign or business-logic changes:
+
+- **Phase 2**: booking action handlers (`MyBookingsView.vue`,
+  `LandlordBookingsView.vue`) wrap approve/reject/cancel calls in
+  try/catch + toast, since the backend can now legitimately reject an
+  invalid state transition (422).
+- **Phase 3**: `booking.room` / `conversation.room` null-guarded with
+  fallback text, matching the backend's soft-delete null-safety fix.
+- **Phase 4**: `booking.student` null-guarded in
+  `LandlordBookingsView.vue`.
+- **Phase 5**: previously-unguarded async flows (room list/map load,
+  favorite-toggle, message-send, room delete, user status-toggle) now
+  have try/catch + toast error handling; room-approval and
+  booking-approval actions gained a `reactive(new Set())` busy-state
+  guard against double-submission on a double-click.
+
+## 8. Known gaps to close before this ships
 
 - No `.htaccess`/deploy config — this is a dev-mode scaffold
   (`npm run dev` / `npm run build` only).
-- No automated tests (Vitest/Cypress) yet.
+- No automated tests (Vitest/Cypress) yet — still true as of Phase 5;
+  hardening added error-handling coverage, not test coverage.
 - The Khmer translations in `locales/km.json` are a reasonable
   best-effort pass, not reviewed by a native speaker — worth a review
   pass before this is user-facing.

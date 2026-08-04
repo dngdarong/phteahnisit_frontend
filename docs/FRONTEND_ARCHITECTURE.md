@@ -193,3 +193,11 @@ with `meta.requiresAuth`/`meta.roles`, and full bilingual coverage.
   (Favorites/My bookings for students, Booking requests for landlords,
   Messages for everyone authenticated) in the profile dropdown, plus a
   public "Map" link visible to guests too.
+
+## 9. Hardening (Phases 1–5)
+
+A post-v0.2 hardening pass — error handling + toast feedback on
+previously-unguarded async flows, double-submit guards on approval
+actions, null-guards on soft-deleted relation fields. No UI redesign
+or business-logic changes. See `README.md` section 7 for the itemized
+summary.
