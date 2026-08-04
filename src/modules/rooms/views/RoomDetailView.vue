@@ -133,6 +133,7 @@ async function sendMessage() {
             :src="slotProps.item.url"
             :alt="room.title"
             class="aspect-video w-full object-cover"
+            loading="lazy"
             @error="failedImages.add(slotProps.item.url)"
           />
           <div v-else class="grid aspect-video place-items-center bg-brand-50 text-brand-300">
@@ -145,6 +146,7 @@ async function sendMessage() {
             :src="slotProps.item.url"
             :alt="room.title"
             class="h-16 w-24 object-cover"
+            loading="lazy"
             @error="failedImages.add(slotProps.item.url)"
           />
           <div v-else class="grid h-16 w-24 place-items-center bg-brand-50 text-brand-300">

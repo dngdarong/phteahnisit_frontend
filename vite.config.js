@@ -12,4 +12,20 @@ export default defineConfig({
   server: {
     port: 5173,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (
+            id.includes('node_modules/vue/') ||
+            id.includes('node_modules/vue-router/') ||
+            id.includes('node_modules/pinia/') ||
+            id.includes('node_modules/axios/')
+          ) {
+            return 'vendor'
+          }
+        },
+      },
+    },
+  },
 })
