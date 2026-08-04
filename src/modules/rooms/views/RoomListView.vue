@@ -1,6 +1,8 @@
 <script setup>
 import { ref, reactive, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
+import { useAuthStore } from '@/stores/auth'
 import roomService from '@/services/room.service'
 import RoomCard from '@/components/RoomCard.vue'
 import InputText from 'primevue/inputtext'
@@ -9,6 +11,8 @@ import Paginator from 'primevue/paginator'
 import ProgressSpinner from 'primevue/progressspinner'
 
 const { t } = useI18n()
+const toast = useToast()
+const auth = useAuthStore()
 
 const rooms = ref([])
 const loading = ref(false)
@@ -41,6 +45,8 @@ async function load() {
     })
     rooms.value = data.data
     total.value = data.meta?.total ?? data.data.length
+  } catch (e) {
+    toast.add({ severity: 'error', summary: t('common.loadFailed'), life: 4000 })
   } finally {
     loading.value = false
   }
@@ -85,6 +91,13 @@ onMounted(load)
         :placeholder="t('room.roomType')"
         class="w-full sm:w-48"
       />
+      <router-link
+        :to="{ name: 'room-map' }"
+        class="flex items-center justify-center gap-1.5 rounded-md border border-brand-200 px-3 py-2 text-sm font-medium text-brand-700 hover:bg-brand-50 sm:w-auto"
+      >
+        <i class="pi pi-map-marker" />
+        {{ t('room.viewOnMap') }}
+      </router-link>
     </div>
 
     <div v-if="loading" class="grid place-items-center py-20">
@@ -98,7 +111,7 @@ onMounted(load)
     </div>
 
     <div v-else class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      <RoomCard v-for="room in rooms" :key="room.id" :room="room" />
+      <RoomCard v-for="room in rooms" :key="room.id" :room="room" :show-favorite="auth.isStudent" />
     </div>
 
     <Paginator

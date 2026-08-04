@@ -14,6 +14,11 @@ const routes = [
     props: true,
   },
   {
+    path: '/map',
+    name: 'room-map',
+    component: () => import('@/modules/rooms/views/RoomMapView.vue'),
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('@/modules/auth/views/LoginView.vue'),
@@ -38,6 +43,35 @@ const routes = [
     meta: { requiresAuth: true },
   },
 
+  // v0.2 Chat - either role, ConversationPolicy enforces participancy server-side
+  {
+    path: '/chat',
+    name: 'chat-list',
+    component: () => import('@/modules/chat/views/ConversationsView.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/chat/:id',
+    name: 'chat-thread',
+    component: () => import('@/modules/chat/views/ConversationView.vue'),
+    props: true,
+    meta: { requiresAuth: true },
+  },
+
+  // v0.2 Student-only
+  {
+    path: '/favorites',
+    name: 'favorites',
+    component: () => import('@/modules/favorites/views/FavoritesView.vue'),
+    meta: { requiresAuth: true, roles: ['student'] },
+  },
+  {
+    path: '/bookings',
+    name: 'my-bookings',
+    component: () => import('@/modules/bookings/views/MyBookingsView.vue'),
+    meta: { requiresAuth: true, roles: ['student'] },
+  },
+
   // Landlord
   {
     path: '/landlord/rooms',
@@ -58,6 +92,12 @@ const routes = [
     props: true,
     meta: { requiresAuth: true, roles: ['landlord'] },
   },
+  {
+    path: '/landlord/bookings',
+    name: 'landlord-bookings',
+    component: () => import('@/modules/bookings/views/LandlordBookingsView.vue'),
+    meta: { requiresAuth: true, roles: ['landlord'] },
+  },
 
   // Admin
   {
@@ -70,6 +110,26 @@ const routes = [
     path: '/admin/users',
     name: 'admin-users',
     component: () => import('@/modules/admin/views/UsersView.vue'),
+    meta: { requiresAuth: true, roles: ['admin'] },
+  },
+  {
+    path: '/admin/users/new',
+    name: 'admin-user-create',
+    component: () => import('@/modules/admin/views/UserFormView.vue'),
+    meta: { requiresAuth: true, roles: ['admin'] },
+  },
+  {
+    path: '/admin/users/:id',
+    name: 'admin-user-detail',
+    component: () => import('@/modules/admin/views/UserDetailView.vue'),
+    props: true,
+    meta: { requiresAuth: true, roles: ['admin'] },
+  },
+  {
+    path: '/admin/users/:id/edit',
+    name: 'admin-user-edit',
+    component: () => import('@/modules/admin/views/UserFormView.vue'),
+    props: true,
     meta: { requiresAuth: true, roles: ['admin'] },
   },
 ]

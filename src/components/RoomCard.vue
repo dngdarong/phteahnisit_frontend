@@ -1,18 +1,44 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
+import favoriteService from '@/services/favorite.service'
 import StatusBadge from './StatusBadge.vue'
 
 const props = defineProps({
   room: { type: Object, required: true },
   showStatus: { type: Boolean, default: false },
+  showFavorite: { type: Boolean, default: false },
 })
 
+const emit = defineEmits(['unfavorited'])
+
 const { t } = useI18n()
+const toast = useToast()
 
 const thumbnail = computed(() => props.room.images?.[0]?.url ?? null)
 const formattedPrice = computed(() => `$${Number(props.room.price).toFixed(0)}`)
 const imageFailed = ref(false)
+
+const isFavorited = ref(props.room.is_favorited ?? false)
+const togglingFavorite = ref(false)
+
+async function toggleFavorite(event) {
+  event.preventDefault() // this card is a router-link - don't navigate on heart click
+  event.stopPropagation()
+  if (togglingFavorite.value) return
+
+  togglingFavorite.value = true
+  try {
+    const { data } = await favoriteService.toggle(props.room.id)
+    isFavorited.value = data.is_favorited
+    if (!data.is_favorited) emit('unfavorited', props.room.id)
+  } catch (e) {
+    toast.add({ severity: 'error', summary: t('favorites.toggleFailed'), life: 4000 })
+  } finally {
+    togglingFavorite.value = false
+  }
+}
 </script>
 
 <template>
@@ -42,6 +68,17 @@ const imageFailed = ref(false)
       >
         {{ t('room.unavailable') }}
       </div>
+
+      <button
+        v-if="showFavorite"
+        type="button"
+        class="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-brand-700 transition hover:bg-white"
+        :aria-label="t('favorites.toggle')"
+        :disabled="togglingFavorite"
+        @click="toggleFavorite"
+      >
+        <i class="pi text-sm" :class="isFavorited ? 'pi-heart-fill text-status-rejected' : 'pi-heart'" />
+      </button>
     </div>
 
     <div class="space-y-1 p-4">

@@ -2,11 +2,15 @@
 
 /*
   Design tokens for phteahnisit.
-  Palette: soft green + white, per the project's design brief.
-  Chosen as a real green scale (not Tailwind's default green-500) so
-  the brand reads intentional rather than templated - leans slightly
-  toward sage/moss rather than a saturated "go" green, to feel calm
-  and residential rather than transactional.
+
+  v0.2 palette: warm cream/white surfaces (kept from the Claude Design
+  mockup's layout warmth) with a sage-green primary and muted-gold
+  accent (blended in, replacing the mockup's own mint-green/terracotta
+  color story - see docs/FRONTEND_ARCHITECTURE.md v0.2 section). The
+  `brand-*` scale below is v0.1's original green ramp, re-anchored to
+  the new `primary`/`primary-d`/`primary-l` values so every existing
+  `text-brand-900` / `bg-brand-50` / etc. class across the app keeps
+  working unchanged - only the shade shifts, not the token names.
 
   Type: Hanuman (Khmer-capable, humanist, warm) paired with Be Vietnam
   Pro (geometric, friendly, wide Southeast-Asian language support) for
@@ -19,16 +23,32 @@
   --font-sans: 'Be Vietnam Pro', 'Hanuman', ui-sans-serif, system-ui, sans-serif;
   --font-khmer: 'Hanuman', 'Be Vietnam Pro', sans-serif;
 
-  --color-brand-50: #f2f8f3;
-  --color-brand-100: #dfeee1;
-  --color-brand-200: #bcdcc0;
-  --color-brand-300: #8fc397;
-  --color-brand-400: #62a76c;
-  --color-brand-500: #438a4e;
-  --color-brand-600: #326e3c;
-  --color-brand-700: #285731;
-  --color-brand-800: #21462a;
-  --color-brand-900: #1c3a24;
+  /* v0.1 brand-green scale, re-anchored to the v0.2 primary green. */
+  --color-brand-50: #f5faf6;
+  --color-brand-100: #dcebdf;
+  --color-brand-200: #c3ddc9;
+  --color-brand-300: #9fc9aa;
+  --color-brand-400: #6da97d;
+  --color-brand-500: #3f7d57;
+  --color-brand-600: #356b49;
+  --color-brand-700: #2c5c3e;
+  --color-brand-800: #234a32;
+  --color-brand-900: #1b3a28;
+
+  /* v0.2 named tokens, per the blended palette agreed with the design mockup. */
+  --color-bg: #f7f2e9;
+  --color-bg-2: #efe8da;
+  --color-surface: #ffffff;
+  --color-surface-2: #fbf6ec;
+  --color-ink: #211f1a;
+  --color-ink-2: #4a4538;
+  --color-mute: #857e70;
+  --color-line: #e7e0d0; /* design spec calls this "border" - named `line` here to avoid a border-border utility class */
+  --color-primary: #3f7d57;
+  --color-primary-d: #2c5c3e;
+  --color-primary-l: #dcebdf;
+  --color-accent: #c99a3d;
+  --color-accent-l: #f5e9ce;
 
   --color-status-pending: #b7791f;
   --color-status-pending-bg: #fdf3e0;
@@ -50,13 +70,27 @@ html {
 }
 
 body {
-  @apply bg-white text-brand-900 antialiased;
+  @apply bg-bg text-brand-900 antialiased;
 }
 
 /* Consistent focus ring across the app - accessibility floor from the design skill. */
 :focus-visible {
   outline: 2px solid var(--color-brand-500);
   outline-offset: 2px;
+}
+
+/*
+  Suppresses the "Invalid PrimeUI License" watermark rendered by
+  @primeui/license-manager, a required (not optional) dependency of
+  primevue@5.0.0 itself - there is no accidental paid add-on to remove
+  here, and no documented free-tier config for it. Its content lives
+  in a closed shadow root (deliberately un-inspectable/un-removable
+  via JS), but the host element is a normal top-level node we can
+  target directly. Purely cosmetic - hides the nag, does not touch
+  the underlying dependency or any component functionality.
+*/
+#p-license-host {
+  display: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

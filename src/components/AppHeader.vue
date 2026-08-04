@@ -13,14 +13,22 @@ const auth = useAuthStore()
 const menu = ref()
 
 const menuItems = computed(() => {
-  const items = [{ label: t('nav.profile'), icon: 'pi pi-user', command: () => router.push({ name: 'profile' }) }]
+  const items = [
+    { label: t('nav.chat'), icon: 'pi pi-comments', command: () => router.push({ name: 'chat-list' }) },
+    { label: t('nav.profile'), icon: 'pi pi-user', command: () => router.push({ name: 'profile' }) },
+  ]
 
+  if (auth.isStudent) {
+    items.unshift(
+      { label: t('nav.myBookings'), icon: 'pi pi-calendar', command: () => router.push({ name: 'my-bookings' }) },
+      { label: t('nav.favorites'), icon: 'pi pi-heart', command: () => router.push({ name: 'favorites' }) },
+    )
+  }
   if (auth.isLandlord) {
-    items.unshift({
-      label: t('nav.myRooms'),
-      icon: 'pi pi-home',
-      command: () => router.push({ name: 'landlord-rooms' }),
-    })
+    items.unshift(
+      { label: t('nav.landlordBookings'), icon: 'pi pi-calendar', command: () => router.push({ name: 'landlord-bookings' }) },
+      { label: t('nav.myRooms'), icon: 'pi pi-home', command: () => router.push({ name: 'landlord-rooms' }) },
+    )
   }
   if (auth.isAdmin) {
     items.unshift(
@@ -57,6 +65,13 @@ function toggleLocale() {
       </router-link>
 
       <nav class="flex items-center gap-2">
+        <router-link
+          :to="{ name: 'room-map' }"
+          class="hidden items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-brand-700 hover:bg-brand-50 sm:flex"
+        >
+          <i class="pi pi-map-marker" />
+          {{ t('nav.map') }}
+        </router-link>
         <button
           type="button"
           class="rounded-full px-3 py-1.5 text-sm font-medium text-brand-700 hover:bg-brand-50"
