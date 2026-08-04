@@ -41,11 +41,17 @@ export const useAuthStore = defineStore('auth', {
       try {
         await authService.logout()
       } finally {
-        this.user = null
-        this.token = null
-        localStorage.removeItem('phteahnisit_user')
-        localStorage.removeItem('phteahnisit_token')
+        this.clearSession()
       }
+    },
+
+    /** Local-only session clear, no API call - used for logout and by the
+     * api.js 401 interceptor (which must not itself trigger another request). */
+    clearSession() {
+      this.user = null
+      this.token = null
+      localStorage.removeItem('phteahnisit_user')
+      localStorage.removeItem('phteahnisit_token')
     },
 
     /** Re-sync with the backend, e.g. on app load, to catch server-side status changes. */

@@ -1,4 +1,6 @@
 import axios from 'axios'
+import router from '@/router'
+import { useAuthStore } from '@/stores/auth'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
@@ -23,8 +25,13 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('phteahnisit_token')
-      localStorage.removeItem('phteahnisit_user')
+      // clearSession() only touches local state - never call the full
+      // logout() action here, since it POSTs to /auth/logout, which would
+      // recurse back through this same interceptor with the now-invalid token.
+      useAuthStore().clearSession()
+      if (router.currentRoute.value.name !== 'login') {
+        router.push({ name: 'login' })
+      }
     }
     return Promise.reject(error)
   },

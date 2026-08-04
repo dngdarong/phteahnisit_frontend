@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
+import { setActivePinia, createPinia } from 'pinia'
 import api from '@/services/api'
 
 // api.js wires two interceptors directly onto the shared axios instance rather
@@ -12,6 +13,7 @@ const responseFulfilled = api.interceptors.response.handlers[0].fulfilled
 describe('api service (axios instance)', () => {
   beforeEach(() => {
     localStorage.clear()
+    setActivePinia(createPinia())
   })
 
   it('attaches a Bearer token header when one is present', () => {
@@ -30,7 +32,7 @@ describe('api service (axios instance)', () => {
     expect(responseFulfilled(response)).toBe(response)
   })
 
-  it('clears the local session on a 401 response (disabled/expired-token case)', async () => {
+  it('clears the local session and redirects to login on a 401 response (disabled/expired-token case)', async () => {
     localStorage.setItem('phteahnisit_token', 'tok-abc')
     localStorage.setItem('phteahnisit_user', JSON.stringify({ id: 1 }))
     const error = { response: { status: 401, data: { message: 'Unauthenticated.' } } }
@@ -39,6 +41,10 @@ describe('api service (axios instance)', () => {
 
     expect(localStorage.getItem('phteahnisit_token')).toBeNull()
     expect(localStorage.getItem('phteahnisit_user')).toBeNull()
+
+    const router = (await import('@/router')).default
+    await router.isReady()
+    expect(router.currentRoute.value.name).toBe('login')
   })
 
   it('leaves the local session untouched on a non-401 error (e.g. a 422 validation error)', async () => {

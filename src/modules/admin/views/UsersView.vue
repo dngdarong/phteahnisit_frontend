@@ -34,15 +34,24 @@ function statusLabel(status) {
   return t(`admin.statuses.${status}`)
 }
 
+// Guards against an in-flight request resolving after a newer one (e.g. the
+// initial unfiltered load landing after the user has already picked a role
+// filter), which would otherwise overwrite the correct filtered result with
+// stale data.
+let requestId = 0
+
 async function load() {
+  const thisRequest = ++requestId
   loading.value = true
   try {
     const { data } = await userService.list({ role: roleFilter.value })
+    if (thisRequest !== requestId) return
     users.value = data.data
   } catch (e) {
+    if (thisRequest !== requestId) return
     toast.add({ severity: 'error', summary: t('common.loadFailed'), life: 4000 })
   } finally {
-    loading.value = false
+    if (thisRequest === requestId) loading.value = false
   }
 }
 
