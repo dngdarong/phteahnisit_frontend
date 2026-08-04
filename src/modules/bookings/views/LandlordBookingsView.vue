@@ -32,9 +32,13 @@ async function load() {
 }
 
 async function approve(booking) {
-  await bookingService.approve(booking.id)
-  toast.add({ severity: 'success', summary: t('booking.approvedToast'), life: 3000 })
-  load()
+  try {
+    await bookingService.approve(booking.id)
+    toast.add({ severity: 'success', summary: t('booking.approvedToast'), life: 3000 })
+    load()
+  } catch (e) {
+    toast.add({ severity: 'error', summary: e.response?.data?.message || t('common.loadFailed'), life: 4000 })
+  }
 }
 
 function openReject(booking) {
@@ -43,10 +47,15 @@ function openReject(booking) {
 }
 
 async function confirmReject() {
-  await bookingService.reject(rejectDialogBooking.value.id, rejectReason.value)
-  toast.add({ severity: 'info', summary: t('booking.rejectedToast'), life: 3000 })
-  rejectDialogBooking.value = null
-  load()
+  try {
+    await bookingService.reject(rejectDialogBooking.value.id, rejectReason.value)
+    toast.add({ severity: 'info', summary: t('booking.rejectedToast'), life: 3000 })
+    rejectDialogBooking.value = null
+    load()
+  } catch (e) {
+    toast.add({ severity: 'error', summary: e.response?.data?.message || t('common.loadFailed'), life: 4000 })
+    rejectDialogBooking.value = null
+  }
 }
 
 onMounted(load)

@@ -36,9 +36,13 @@ function confirmCancel(booking) {
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',
     accept: async () => {
-      await bookingService.cancel(booking.id)
-      toast.add({ severity: 'success', summary: t('booking.cancelled'), life: 3000 })
-      load()
+      try {
+        await bookingService.cancel(booking.id)
+        toast.add({ severity: 'success', summary: t('booking.cancelled'), life: 3000 })
+        load()
+      } catch (e) {
+        toast.add({ severity: 'error', summary: e.response?.data?.message || t('booking.requestFailed'), life: 4000 })
+      }
     },
   })
 }
