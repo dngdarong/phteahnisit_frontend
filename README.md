@@ -1,4 +1,4 @@
-# phteahnisit — Frontend (v0.1 MVP + v0.2, hardened through Phase 5)
+# phteahnisit — Frontend (v0.1 MVP + v0.2, hardened through Phase 6.1)
 
 ## 1. Setup
 
@@ -108,7 +108,7 @@ chat (per-room conversation threads, polling-based), and a room map
 Payments, reviews/ratings, and a standalone notifications system
 remain out of scope — no UI scaffolding for any of these exists.
 
-## 7. Hardening (Phases 1–5)
+## 7. Hardening (Phases 1–6.1)
 
 Post-v0.2 hardening pass, no UI redesign or business-logic changes:
 
@@ -125,13 +125,24 @@ Post-v0.2 hardening pass, no UI redesign or business-logic changes:
   have try/catch + toast error handling; room-approval and
   booking-approval actions gained a `reactive(new Set())` busy-state
   guard against double-submission on a double-click.
+- **Phase 6 + 6.1 — Test infrastructure and coverage**: Vitest + Vue
+  Test Utils + jsdom + Pinia testing utilities installed
+  (devDependencies only, zero production bundle impact). 19 test files,
+  101 tests, covering the auth store/localStorage persistence, the
+  axios interceptor's 401-handling, and the double-submit guards and
+  null-relation fallbacks from Phases 3–5 across bookings, favorites,
+  messaging, room detail, and admin moderation. See
+  `docs/FRONTEND_ARCHITECTURE.md` for what was deliberately left
+  untested.
 
 ## 8. Known gaps to close before this ships
 
 - No `.htaccess`/deploy config — this is a dev-mode scaffold
   (`npm run dev` / `npm run build` only).
-- No automated tests (Vitest/Cypress) yet — still true as of Phase 5;
-  hardening added error-handling coverage, not test coverage.
+- Automated tests now exist (Vitest, `npm run test`) but coverage is
+  partial (~69% statements as of Phase 6.1) — no E2E (Cypress/
+  Playwright) coverage yet, and some low-value views (map view, trivial
+  wrappers, static footer) remain deliberately untested.
 - The Khmer translations in `locales/km.json` are a reasonable
   best-effort pass, not reviewed by a native speaker — worth a review
   pass before this is user-facing.

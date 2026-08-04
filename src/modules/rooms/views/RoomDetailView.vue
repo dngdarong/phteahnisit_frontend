@@ -71,13 +71,23 @@ const bookingForm = reactive({ move_in_date: null, duration_months: 1 })
 const bookingErrors = ref({})
 const submittingBooking = ref(false)
 
+// toISOString() converts through UTC, which silently shifts the date back a
+// day in any positive-UTC-offset timezone (e.g. Cambodia, UTC+7) - format
+// from the DatePicker's local date parts instead.
+function toLocalDateString(date) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 async function submitBooking() {
   bookingErrors.value = {}
   submittingBooking.value = true
   try {
     await bookingService.create({
       room_id: room.value.id,
-      move_in_date: bookingForm.move_in_date ? new Date(bookingForm.move_in_date).toISOString().slice(0, 10) : null,
+      move_in_date: bookingForm.move_in_date ? toLocalDateString(bookingForm.move_in_date) : null,
       duration_months: bookingForm.duration_months,
     })
     toast.add({ severity: 'success', summary: t('booking.requestSent'), life: 4000 })
@@ -133,6 +143,7 @@ async function sendMessage() {
             :src="slotProps.item.url"
             :alt="room.title"
             class="aspect-video w-full object-cover"
+            loading="lazy"
             @error="failedImages.add(slotProps.item.url)"
           />
           <div v-else class="grid aspect-video place-items-center bg-brand-50 text-brand-300">
@@ -145,6 +156,7 @@ async function sendMessage() {
             :src="slotProps.item.url"
             :alt="room.title"
             class="h-16 w-24 object-cover"
+            loading="lazy"
             @error="failedImages.add(slotProps.item.url)"
           />
           <div v-else class="grid h-16 w-24 place-items-center bg-brand-50 text-brand-300">

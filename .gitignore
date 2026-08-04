@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Vitest coverage output
+coverage
+
 # Environment files (see .env.example for the template)
 .env
 .env.local
