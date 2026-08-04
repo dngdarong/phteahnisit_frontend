@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import roomService from '@/services/room.service'
@@ -16,6 +16,8 @@ const rooms = ref([])
 const loading = ref(true)
 const rejectDialogRoom = ref(null)
 const rejectReason = ref('')
+const approvingIds = reactive(new Set())
+const rejecting = ref(false)
 
 async function load() {
   loading.value = true
@@ -30,9 +32,17 @@ async function load() {
 }
 
 async function approve(room) {
-  await roomService.approve(room.id)
-  toast.add({ severity: 'success', summary: t('room.approvedToast', { title: room.title }), life: 3000 })
-  load()
+  if (approvingIds.has(room.id)) return
+  approvingIds.add(room.id)
+  try {
+    await roomService.approve(room.id)
+    toast.add({ severity: 'success', summary: t('room.approvedToast', { title: room.title }), life: 3000 })
+    load()
+  } catch (e) {
+    toast.add({ severity: 'error', summary: e.response?.data?.message || t('common.loadFailed'), life: 4000 })
+  } finally {
+    approvingIds.delete(room.id)
+  }
 }
 
 function openReject(room) {
@@ -41,10 +51,18 @@ function openReject(room) {
 }
 
 async function confirmReject() {
-  await roomService.reject(rejectDialogRoom.value.id, rejectReason.value)
-  toast.add({ severity: 'info', summary: t('room.rejectedToast', { title: rejectDialogRoom.value.title }), life: 3000 })
-  rejectDialogRoom.value = null
-  load()
+  if (rejecting.value) return
+  rejecting.value = true
+  try {
+    await roomService.reject(rejectDialogRoom.value.id, rejectReason.value)
+    toast.add({ severity: 'info', summary: t('room.rejectedToast', { title: rejectDialogRoom.value.title }), life: 3000 })
+    rejectDialogRoom.value = null
+    load()
+  } catch (e) {
+    toast.add({ severity: 'error', summary: e.response?.data?.message || t('common.loadFailed'), life: 4000 })
+  } finally {
+    rejecting.value = false
+  }
 }
 
 onMounted(load)
@@ -67,8 +85,16 @@ onMounted(load)
         <RoomCard :room="room" show-status />
         <p class="text-xs text-brand-500">{{ t('room.owner') }}: {{ room.landlord?.name }} · {{ room.landlord?.phone }}</p>
         <div class="flex gap-2">
-          <Button :label="t('room.approve')" icon="pi pi-check" size="small" class="flex-1" @click="approve(room)" />
-          <Button :label="t('room.reject')" icon="pi pi-times" size="small" severity="danger" outlined @click="openReject(room)" />
+          <Button
+            :label="t('room.approve')"
+            icon="pi pi-check"
+            size="small"
+            class="flex-1"
+            :loading="approvingIds.has(room.id)"
+            :disabled="approvingIds.has(room.id)"
+            @click="approve(room)"
+          />
+          <Button :label="t('room.reject')" icon="pi pi-times" size="small" severity="danger" outlined :disabled="approvingIds.has(room.id)" @click="openReject(room)" />
         </div>
       </div>
     </div>
@@ -77,8 +103,8 @@ onMounted(load)
       <p class="mb-3 text-sm text-brand-600">{{ t('room.rejectReasonHint') }}</p>
       <Textarea v-model="rejectReason" class="w-full" rows="3" />
       <template #footer>
-        <Button :label="t('common.cancel')" text @click="rejectDialogRoom = null" />
-        <Button :label="t('room.reject')" severity="danger" @click="confirmReject" />
+        <Button :label="t('common.cancel')" text :disabled="rejecting" @click="rejectDialogRoom = null" />
+        <Button :label="t('room.reject')" severity="danger" :loading="rejecting" @click="confirmReject" />
       </template>
     </Dialog>
   </div>

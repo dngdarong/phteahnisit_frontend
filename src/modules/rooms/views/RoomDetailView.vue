@@ -58,6 +58,8 @@ async function toggleFavorite() {
   try {
     const { data } = await favoriteService.toggle(room.value.id)
     isFavorited.value = data.is_favorited
+  } catch (e) {
+    toast.add({ severity: 'error', summary: t('favorites.toggleFailed'), life: 4000 })
   } finally {
     togglingFavorite.value = false
   }
@@ -99,6 +101,8 @@ async function sendMessage() {
   try {
     const { data } = await chatService.sendToRoom(room.value.id, messageBody.value.trim())
     router.push({ name: 'chat-thread', params: { id: data.data.conversation_id } })
+  } catch (e) {
+    toast.add({ severity: 'error', summary: t('chat.sendFailed'), life: 4000 })
   } finally {
     sendingMessage.value = false
   }
@@ -139,6 +143,7 @@ async function sendMessage() {
           <img
             v-if="!failedImages.has(slotProps.item.url)"
             :src="slotProps.item.url"
+            :alt="room.title"
             class="h-16 w-24 object-cover"
             @error="failedImages.add(slotProps.item.url)"
           />

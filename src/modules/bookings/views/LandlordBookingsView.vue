@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import bookingService from '@/services/booking.service'
@@ -16,6 +16,8 @@ const bookings = ref([])
 const loading = ref(true)
 const rejectDialogBooking = ref(null)
 const rejectReason = ref('')
+const approvingIds = reactive(new Set())
+const rejecting = ref(false)
 
 const statusSeverity = { pending: 'warn', approved: 'success', rejected: 'danger', cancelled: 'secondary' }
 
@@ -32,12 +34,16 @@ async function load() {
 }
 
 async function approve(booking) {
+  if (approvingIds.has(booking.id)) return
+  approvingIds.add(booking.id)
   try {
     await bookingService.approve(booking.id)
     toast.add({ severity: 'success', summary: t('booking.approvedToast'), life: 3000 })
     load()
   } catch (e) {
     toast.add({ severity: 'error', summary: e.response?.data?.message || t('common.loadFailed'), life: 4000 })
+  } finally {
+    approvingIds.delete(booking.id)
   }
 }
 
@@ -47,6 +53,8 @@ function openReject(booking) {
 }
 
 async function confirmReject() {
+  if (rejecting.value) return
+  rejecting.value = true
   try {
     await bookingService.reject(rejectDialogBooking.value.id, rejectReason.value)
     toast.add({ severity: 'info', summary: t('booking.rejectedToast'), life: 3000 })
@@ -55,6 +63,8 @@ async function confirmReject() {
   } catch (e) {
     toast.add({ severity: 'error', summary: e.response?.data?.message || t('common.loadFailed'), life: 4000 })
     rejectDialogBooking.value = null
+  } finally {
+    rejecting.value = false
   }
 }
 
@@ -97,8 +107,15 @@ onMounted(load)
           <Tag :value="t(`booking.status.${booking.status}`)" :severity="statusSeverity[booking.status]" />
         </div>
         <div v-if="booking.status === 'pending'" class="mt-3 flex gap-2">
-          <Button :label="t('room.approve')" icon="pi pi-check" size="small" @click="approve(booking)" />
-          <Button :label="t('room.reject')" icon="pi pi-times" size="small" severity="danger" outlined @click="openReject(booking)" />
+          <Button
+            :label="t('room.approve')"
+            icon="pi pi-check"
+            size="small"
+            :loading="approvingIds.has(booking.id)"
+            :disabled="approvingIds.has(booking.id)"
+            @click="approve(booking)"
+          />
+          <Button :label="t('room.reject')" icon="pi pi-times" size="small" severity="danger" outlined :disabled="approvingIds.has(booking.id)" @click="openReject(booking)" />
         </div>
       </div>
     </div>
@@ -107,8 +124,8 @@ onMounted(load)
       <p class="mb-3 text-sm text-brand-600">{{ t('room.rejectReasonHint') }}</p>
       <Textarea v-model="rejectReason" class="w-full" rows="3" />
       <template #footer>
-        <Button :label="t('common.cancel')" text @click="rejectDialogBooking = null" />
-        <Button :label="t('room.reject')" severity="danger" @click="confirmReject" />
+        <Button :label="t('common.cancel')" text :disabled="rejecting" @click="rejectDialogBooking = null" />
+        <Button :label="t('room.reject')" severity="danger" :loading="rejecting" @click="confirmReject" />
       </template>
     </Dialog>
   </div>

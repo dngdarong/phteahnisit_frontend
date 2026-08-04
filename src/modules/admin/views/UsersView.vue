@@ -53,9 +53,13 @@ function toggleStatus(user) {
     header: isActive ? t('admin.disableUser') : t('admin.enableUser'),
     acceptClass: isActive ? 'p-button-danger' : undefined,
     accept: async () => {
-      await (isActive ? userService.disable(user.id) : userService.enable(user.id))
-      toast.add({ severity: 'success', summary: t('admin.updated'), life: 2500 })
-      load()
+      try {
+        await (isActive ? userService.disable(user.id) : userService.enable(user.id))
+        toast.add({ severity: 'success', summary: t('admin.updated'), life: 2500 })
+        load()
+      } catch (e) {
+        toast.add({ severity: 'error', summary: e.response?.data?.message || t('admin.saveFailed'), life: 4000 })
+      }
     },
   })
 }

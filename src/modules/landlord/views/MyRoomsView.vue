@@ -36,9 +36,13 @@ function confirmDelete(room) {
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',
     accept: async () => {
-      await roomService.remove(room.id)
-      toast.add({ severity: 'success', summary: t('room.deleted'), life: 3000 })
-      load()
+      try {
+        await roomService.remove(room.id)
+        toast.add({ severity: 'success', summary: t('room.deleted'), life: 3000 })
+        load()
+      } catch (e) {
+        toast.add({ severity: 'error', summary: e.response?.data?.message || t('room.deleteFailed'), life: 4000 })
+      }
     },
   })
 }

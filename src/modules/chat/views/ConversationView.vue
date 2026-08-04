@@ -45,6 +45,8 @@ async function send() {
     await chatService.sendMessage(props.id, body.value.trim())
     body.value = ''
     await load({ silent: true })
+  } catch (e) {
+    toast.add({ severity: 'error', summary: t('chat.sendFailed'), life: 4000 })
   } finally {
     sending.value = false
   }

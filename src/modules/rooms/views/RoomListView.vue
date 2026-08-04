@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
 import { useAuthStore } from '@/stores/auth'
 import roomService from '@/services/room.service'
 import RoomCard from '@/components/RoomCard.vue'
@@ -10,6 +11,7 @@ import Paginator from 'primevue/paginator'
 import ProgressSpinner from 'primevue/progressspinner'
 
 const { t } = useI18n()
+const toast = useToast()
 const auth = useAuthStore()
 
 const rooms = ref([])
@@ -43,6 +45,8 @@ async function load() {
     })
     rooms.value = data.data
     total.value = data.meta?.total ?? data.data.length
+  } catch (e) {
+    toast.add({ severity: 'error', summary: t('common.loadFailed'), life: 4000 })
   } finally {
     loading.value = false
   }

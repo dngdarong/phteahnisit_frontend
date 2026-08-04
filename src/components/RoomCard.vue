@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
 import favoriteService from '@/services/favorite.service'
 import StatusBadge from './StatusBadge.vue'
 
@@ -13,6 +14,7 @@ const props = defineProps({
 const emit = defineEmits(['unfavorited'])
 
 const { t } = useI18n()
+const toast = useToast()
 
 const thumbnail = computed(() => props.room.images?.[0]?.url ?? null)
 const formattedPrice = computed(() => `$${Number(props.room.price).toFixed(0)}`)
@@ -31,6 +33,8 @@ async function toggleFavorite(event) {
     const { data } = await favoriteService.toggle(props.room.id)
     isFavorited.value = data.is_favorited
     if (!data.is_favorited) emit('unfavorited', props.room.id)
+  } catch (e) {
+    toast.add({ severity: 'error', summary: t('favorites.toggleFailed'), life: 4000 })
   } finally {
     togglingFavorite.value = false
   }

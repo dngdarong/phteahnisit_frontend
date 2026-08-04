@@ -43,6 +43,7 @@
     "loadFailed": "Couldn't load that room.",
     "deleteConfirm": "Delete \"{title}\"? This can't be undone from here.",
     "deleted": "Room deleted",
+    "deleteFailed": "Couldn't delete this room.",
     "postFirstHint": "Post your first room to get started.",
     "noneWaiting": "Nothing waiting for review.",
     "approve": "Approve",
@@ -124,7 +125,8 @@
   "favorites": {
     "toggle": "Save to favorites",
     "empty": "No saved rooms yet",
-    "emptyHint": "Tap the heart on a room to save it here."
+    "emptyHint": "Tap the heart on a room to save it here.",
+    "toggleFailed": "Couldn't update favorites."
   },
   "booking": {
     "bookThisRoom": "Book this room",
@@ -158,6 +160,7 @@
     "messagePlaceholder": "Type a message...",
     "send": "Send",
     "noConversations": "No conversations yet.",
-    "roomUnavailable": "Room no longer available"
+    "roomUnavailable": "Room no longer available",
+    "sendFailed": "Couldn't send your message."
   }
 }

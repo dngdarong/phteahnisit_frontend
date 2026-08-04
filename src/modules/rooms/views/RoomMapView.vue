@@ -1,10 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
 import roomService from '@/services/room.service'
 import ProgressSpinner from 'primevue/progressspinner'
 
 const { t } = useI18n()
+const toast = useToast()
 
 const rooms = ref([])
 const loading = ref(true)
@@ -14,6 +16,8 @@ async function load() {
   try {
     const { data } = await roomService.map()
     rooms.value = data.data
+  } catch (e) {
+    toast.add({ severity: 'error', summary: t('common.loadFailed'), life: 4000 })
   } finally {
     loading.value = false
   }
