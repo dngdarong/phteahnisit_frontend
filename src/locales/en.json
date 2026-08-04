@@ -145,6 +145,7 @@
     "rejectedToast": "Booking rejected",
     "rejectBooking": "Reject booking",
     "roomUnavailable": "Room no longer available",
+    "requesterUnavailable": "Requester account no longer available",
     "status": {
       "pending": "Pending",
       "approved": "Approved",

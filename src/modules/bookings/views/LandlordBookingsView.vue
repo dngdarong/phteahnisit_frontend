@@ -85,9 +85,10 @@ onMounted(load)
               {{ booking.room.title }}
             </router-link>
             <p v-else class="font-medium italic text-brand-400">{{ t('booking.roomUnavailable') }}</p>
-            <p class="text-sm text-brand-600">
+            <p v-if="booking.student" class="text-sm text-brand-600">
               {{ t('booking.requestedBy') }}: {{ booking.student.name }} &middot; {{ booking.student.phone }}
             </p>
+            <p v-else class="text-sm italic text-brand-400">{{ t('booking.requesterUnavailable') }}</p>
             <p class="text-sm text-brand-600">
               {{ t('booking.moveInDate') }}: {{ booking.move_in_date }} &middot;
               {{ booking.duration_months }} {{ t('booking.months') }}

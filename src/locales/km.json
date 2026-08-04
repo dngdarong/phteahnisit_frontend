@@ -145,6 +145,7 @@
     "rejectedToast": "ការកក់ត្រូវបានបដិសេធ",
     "rejectBooking": "បដិសេធការកក់",
     "roomUnavailable": "បន្ទប់នេះលែងមានទៀតហើយ",
+    "requesterUnavailable": "គណនីអ្នកស្នើសុំលែងមានទៀតហើយ",
     "status": {
       "pending": "កំពុងរង់ចាំ",
       "approved": "បានអនុម័ត",
