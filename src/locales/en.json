@@ -144,6 +144,7 @@
     "approvedToast": "Booking approved",
     "rejectedToast": "Booking rejected",
     "rejectBooking": "Reject booking",
+    "roomUnavailable": "Room no longer available",
     "status": {
       "pending": "Pending",
       "approved": "Approved",
@@ -155,6 +156,7 @@
     "message": "Message landlord",
     "messagePlaceholder": "Type a message...",
     "send": "Send",
-    "noConversations": "No conversations yet."
+    "noConversations": "No conversations yet.",
+    "roomUnavailable": "Room no longer available"
   }
 }

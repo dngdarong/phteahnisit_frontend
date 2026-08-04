@@ -31,7 +31,7 @@ async function load() {
 
 function confirmCancel(booking) {
   confirm.require({
-    message: t('booking.cancelConfirm', { title: booking.room.title }),
+    message: t('booking.cancelConfirm', { title: booking.room?.title ?? t('booking.roomUnavailable') }),
     header: t('booking.cancelBooking'),
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',
@@ -68,11 +68,13 @@ onMounted(load)
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div>
             <router-link
+              v-if="booking.room"
               :to="{ name: 'room-detail', params: { id: booking.room.id } }"
               class="font-medium text-brand-900 hover:underline"
             >
               {{ booking.room.title }}
             </router-link>
+            <p v-else class="font-medium italic text-brand-400">{{ t('booking.roomUnavailable') }}</p>
             <p class="text-sm text-brand-600">
               {{ t('booking.moveInDate') }}: {{ booking.move_in_date }} &middot;
               {{ booking.duration_months }} {{ t('booking.months') }}

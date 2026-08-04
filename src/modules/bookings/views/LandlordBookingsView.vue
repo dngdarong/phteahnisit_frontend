@@ -78,11 +78,13 @@ onMounted(load)
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div>
             <router-link
+              v-if="booking.room"
               :to="{ name: 'room-detail', params: { id: booking.room.id } }"
               class="font-medium text-brand-900 hover:underline"
             >
               {{ booking.room.title }}
             </router-link>
+            <p v-else class="font-medium italic text-brand-400">{{ t('booking.roomUnavailable') }}</p>
             <p class="text-sm text-brand-600">
               {{ t('booking.requestedBy') }}: {{ booking.student.name }} &middot; {{ booking.student.phone }}
             </p>

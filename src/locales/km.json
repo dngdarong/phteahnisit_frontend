@@ -144,6 +144,7 @@
     "approvedToast": "ការកក់ត្រូវបានអនុម័ត",
     "rejectedToast": "ការកក់ត្រូវបានបដិសេធ",
     "rejectBooking": "បដិសេធការកក់",
+    "roomUnavailable": "បន្ទប់នេះលែងមានទៀតហើយ",
     "status": {
       "pending": "កំពុងរង់ចាំ",
       "approved": "បានអនុម័ត",
@@ -155,6 +156,7 @@
     "message": "ផ្ញើសារទៅម្ចាស់ផ្ទះ",
     "messagePlaceholder": "វាយសារ...",
     "send": "ផ្ញើ",
-    "noConversations": "មិនទាន់មានការសន្ទនាទេ។"
+    "noConversations": "មិនទាន់មានការសន្ទនាទេ។",
+    "roomUnavailable": "បន្ទប់នេះលែងមានទៀតហើយ"
   }
 }

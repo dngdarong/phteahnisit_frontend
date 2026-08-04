@@ -70,11 +70,13 @@ onUnmounted(() => {
       <div class="mb-3 border-b border-brand-100 pb-3">
         <p class="font-medium text-brand-900">{{ conversation.other_participant?.name }}</p>
         <router-link
+          v-if="conversation.room"
           :to="{ name: 'room-detail', params: { id: conversation.room.id } }"
           class="text-sm text-brand-500 hover:underline"
         >
-          {{ conversation.room?.title }}
+          {{ conversation.room.title }}
         </router-link>
+        <p v-else class="text-sm italic text-brand-400">{{ t('chat.roomUnavailable') }}</p>
       </div>
 
       <div ref="scrollEl" class="flex-1 space-y-2 overflow-y-auto py-2">
