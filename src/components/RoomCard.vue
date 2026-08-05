@@ -72,7 +72,7 @@ async function toggleFavorite(event) {
       <button
         v-if="showFavorite"
         type="button"
-        class="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-brand-700 transition hover:bg-white"
+        class="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-brand-700 transition-colors duration-[var(--motion-fast)] hover:bg-white focus-visible:bg-white"
         :aria-label="t('favorites.toggle')"
         :disabled="togglingFavorite"
         @click="toggleFavorite"
