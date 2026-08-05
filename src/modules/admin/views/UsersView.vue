@@ -10,6 +10,7 @@ import Column from 'primevue/column'
 import Button from 'primevue/button'
 import Select from 'primevue/select'
 import StatusBadge from '@/components/StatusBadge.vue'
+import RolePill from '@/components/RolePill.vue'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -26,10 +27,6 @@ const roleOptions = computed(() => [
   { label: t('admin.roles.landlord'), value: 'landlord' },
   { label: t('admin.roles.admin'), value: 'admin' },
 ])
-
-function roleLabel(role) {
-  return t(`admin.roles.${role}`)
-}
 
 // Guards against an in-flight request resolving after a newer one (e.g. the
 // initial unfiltered load landing after the user has already picked a role
@@ -108,9 +105,7 @@ onMounted(load)
         <Column field="phone" :header="t('admin.phone')" />
         <Column field="role" :header="t('admin.role')">
           <template #body="{ data }">
-            <span class="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700">
-              {{ roleLabel(data.role) }}
-            </span>
+            <RolePill :role="data.role" />
           </template>
         </Column>
         <Column field="status" :header="t('admin.status')">

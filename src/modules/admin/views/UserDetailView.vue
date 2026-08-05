@@ -7,6 +7,7 @@ import userService from '@/services/user.service'
 import Button from 'primevue/button'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
+import RolePill from '@/components/RolePill.vue'
 
 const props = defineProps({ id: { type: [String, Number], required: true } })
 const { t } = useI18n()
@@ -41,9 +42,7 @@ onMounted(load)
     <template v-else-if="user">
       <div class="mb-6 flex items-center justify-between">
         <h1 class="text-h1 text-brand-900">{{ user.name }}</h1>
-        <span class="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700">
-          {{ t(`admin.roles.${user.role}`) }}
-        </span>
+        <RolePill :role="user.role" />
       </div>
 
       <div class="space-y-3 rounded-card border border-brand-100 bg-white p-5">
