@@ -67,14 +67,14 @@ function toggleLocale() {
       <nav class="flex items-center gap-2">
         <router-link
           :to="{ name: 'room-map' }"
-          class="hidden items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-brand-700 hover:bg-brand-50 sm:flex"
+          class="hidden items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-brand-700 transition-colors duration-[var(--motion-fast)] hover:bg-brand-50 focus-visible:bg-brand-50 sm:flex"
         >
           <i class="pi pi-map-marker" />
           {{ t('nav.map') }}
         </router-link>
         <button
           type="button"
-          class="rounded-full px-3 py-1.5 text-sm font-medium text-brand-700 hover:bg-brand-50"
+          class="rounded-full px-3 py-1.5 text-sm font-medium text-brand-700 transition-colors duration-[var(--motion-fast)] hover:bg-brand-50 focus-visible:bg-brand-50"
           @click="toggleLocale"
         >
           {{ locale === 'km' ? 'EN' : 'ខ្មែរ' }}
@@ -101,7 +101,7 @@ function toggleLocale() {
           />
           <button
             type="button"
-            class="grid h-9 w-9 place-items-center rounded-full bg-brand-50 text-brand-700 hover:bg-brand-100"
+            class="grid h-9 w-9 place-items-center rounded-full bg-brand-50 text-brand-700 transition-colors duration-[var(--motion-fast)] hover:bg-brand-100 focus-visible:bg-brand-100"
             :aria-label="t('nav.profile')"
             @click="menu.toggle($event)"
           >

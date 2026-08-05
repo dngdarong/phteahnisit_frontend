@@ -5,7 +5,7 @@ import { useToast } from 'primevue/usetoast'
 import chatService from '@/services/chat.service'
 import Textarea from 'primevue/textarea'
 import Button from 'primevue/button'
-import ProgressSpinner from 'primevue/progressspinner'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const props = defineProps({ id: { type: [String, Number], required: true } })
 const { t } = useI18n()
@@ -65,7 +65,7 @@ onUnmounted(() => {
 <template>
   <div class="mx-auto flex h-[calc(100vh-4rem)] max-w-2xl flex-col px-4 py-6">
     <div v-if="loading" class="grid flex-1 place-items-center">
-      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" :stroke-width="4" />
+      <LoadingSpinner />
     </div>
 
     <template v-else-if="conversation">
@@ -74,7 +74,7 @@ onUnmounted(() => {
         <router-link
           v-if="conversation.room"
           :to="{ name: 'room-detail', params: { id: conversation.room.id } }"
-          class="text-sm text-brand-500 hover:underline"
+          class="text-sm text-brand-500 hover:underline focus-visible:underline"
         >
           {{ conversation.room.title }}
         </router-link>

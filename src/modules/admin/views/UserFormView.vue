@@ -9,7 +9,7 @@ import Password from 'primevue/password'
 import Select from 'primevue/select'
 import Button from 'primevue/button'
 import Message from 'primevue/message'
-import ProgressSpinner from 'primevue/progressspinner'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const props = defineProps({ id: { type: [String, Number], default: null } })
 const isEdit = computed(() => !!props.id)
@@ -99,49 +99,49 @@ onMounted(() => {
 
 <template>
   <div class="mx-auto max-w-md px-4 py-8">
-    <h1 class="mb-6 text-xl font-semibold text-brand-900">
+    <h1 class="mb-6 text-h1 text-brand-900">
       {{ isEdit ? t('admin.editUser') : t('admin.addUser') }}
     </h1>
 
     <div v-if="loadingExisting" class="grid place-items-center py-24">
-      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" :stroke-width="4" />
+      <LoadingSpinner />
     </div>
 
     <form v-else class="space-y-4" @submit.prevent="submit">
       <div>
-        <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('admin.name') }}</label>
-        <InputText v-model="form.name" class="w-full" required />
+        <label for="user-form-name" class="mb-1 block text-sm font-medium text-brand-700">{{ t('admin.name') }}</label>
+        <InputText id="user-form-name" v-model="form.name" class="w-full" required />
         <small v-if="errors.name" class="text-status-rejected">{{ errors.name[0] }}</small>
       </div>
       <div>
-        <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('admin.email') }}</label>
-        <InputText v-model="form.email" type="email" class="w-full" required />
+        <label for="user-form-email" class="mb-1 block text-sm font-medium text-brand-700">{{ t('admin.email') }}</label>
+        <InputText id="user-form-email" v-model="form.email" type="email" class="w-full" required />
         <small v-if="errors.email" class="text-status-rejected">{{ errors.email[0] }}</small>
       </div>
       <div>
-        <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('admin.phone') }}</label>
-        <InputText v-model="form.phone" class="w-full" placeholder="012345678" required />
+        <label for="user-form-phone" class="mb-1 block text-sm font-medium text-brand-700">{{ t('admin.phone') }}</label>
+        <InputText id="user-form-phone" v-model="form.phone" class="w-full" placeholder="012345678" required />
         <small v-if="errors.phone" class="text-status-rejected">{{ errors.phone[0] }}</small>
       </div>
       <div>
-        <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('admin.role') }}</label>
-        <Select v-model="form.role" :options="roleOptions" option-label="label" option-value="value" class="w-full" />
+        <label for="user-form-role" class="mb-1 block text-sm font-medium text-brand-700">{{ t('admin.role') }}</label>
+        <Select input-id="user-form-role" v-model="form.role" :options="roleOptions" option-label="label" option-value="value" class="w-full" />
         <small v-if="errors.role" class="text-status-rejected">{{ errors.role[0] }}</small>
       </div>
       <div v-if="isEdit">
-        <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('admin.status') }}</label>
-        <Select v-model="form.status" :options="statusOptions" option-label="label" option-value="value" class="w-full" />
+        <label for="user-form-status" class="mb-1 block text-sm font-medium text-brand-700">{{ t('admin.status') }}</label>
+        <Select input-id="user-form-status" v-model="form.status" :options="statusOptions" option-label="label" option-value="value" class="w-full" />
       </div>
 
       <template v-if="!isEdit">
         <div>
-          <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.password') }}</label>
-          <Password v-model="form.password" class="w-full" input-class="w-full" toggle-mask required autocomplete="new-password" />
+          <label for="user-form-password" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.password') }}</label>
+          <Password input-id="user-form-password" v-model="form.password" class="w-full" input-class="w-full" toggle-mask required autocomplete="new-password" />
           <small v-if="errors.password" class="text-status-rejected">{{ errors.password[0] }}</small>
         </div>
         <div>
-          <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.passwordConfirm') }}</label>
-          <Password v-model="form.password_confirmation" class="w-full" input-class="w-full" :feedback="false" toggle-mask required autocomplete="new-password" />
+          <label for="user-form-password-confirm" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.passwordConfirm') }}</label>
+          <Password input-id="user-form-password-confirm" v-model="form.password_confirmation" class="w-full" input-class="w-full" :feedback="false" toggle-mask required autocomplete="new-password" />
         </div>
       </template>
       <p v-else class="text-xs text-brand-500">{{ t('admin.editPasswordHint') }}</p>

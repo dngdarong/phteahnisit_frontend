@@ -9,6 +9,7 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import Button from 'primevue/button'
 import Select from 'primevue/select'
+import StatusBadge from '@/components/StatusBadge.vue'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -28,10 +29,6 @@ const roleOptions = computed(() => [
 
 function roleLabel(role) {
   return t(`admin.roles.${role}`)
-}
-
-function statusLabel(status) {
-  return t(`admin.statuses.${status}`)
 }
 
 // Guards against an in-flight request resolving after a newer one (e.g. the
@@ -97,7 +94,7 @@ onMounted(load)
 <template>
   <div class="mx-auto max-w-5xl px-4 py-8">
     <div class="mb-6 flex items-center justify-between">
-      <h1 class="text-xl font-semibold text-brand-900">{{ t('nav.users') }}</h1>
+      <h1 class="text-h1 text-brand-900">{{ t('nav.users') }}</h1>
       <div class="flex items-center gap-3">
         <Select v-model="roleFilter" :options="roleOptions" option-label="label" option-value="value" @change="load" class="w-48" />
         <Button :label="t('admin.addUser')" icon="pi pi-plus" @click="router.push({ name: 'admin-user-create' })" />
@@ -105,7 +102,7 @@ onMounted(load)
     </div>
 
     <div class="rounded-card overflow-hidden border border-brand-100 bg-white">
-      <DataTable :value="users" :loading="loading" paginator :rows="15" class="phteahnisit-table">
+      <DataTable :value="users" :loading="loading" paginator :rows="15">
         <Column field="name" :header="t('admin.name')" />
         <Column field="email" :header="t('admin.email')" />
         <Column field="phone" :header="t('admin.phone')" />
@@ -118,18 +115,7 @@ onMounted(load)
         </Column>
         <Column field="status" :header="t('admin.status')">
           <template #body="{ data }">
-            <span
-              class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
-              :class="data.status === 'active'
-                ? 'bg-[var(--color-status-approved-bg)] text-[var(--color-status-approved)]'
-                : 'bg-[var(--color-status-rejected-bg)] text-[var(--color-status-rejected)]'"
-            >
-              <span
-                class="h-1.5 w-1.5 rounded-full"
-                :class="data.status === 'active' ? 'bg-[var(--color-status-approved)]' : 'bg-[var(--color-status-rejected)]'"
-              />
-              {{ statusLabel(data.status) }}
-            </span>
+            <StatusBadge domain="user" :status="data.status" />
           </template>
         </Column>
         <Column header="" :style="{ width: '18rem' }">
@@ -172,34 +158,15 @@ onMounted(load)
   </div>
 </template>
 
-<style scoped>
-/* Bring PrimeVue's DataTable chrome (header row, borders, paginator,
-   row hover) in line with the app's brand tokens instead of Aura's
-   generic surface grays - the rest of the app never shows raw PrimeVue
-   default styling this directly since cards/buttons already carry
-   brand classes, but a DataTable's internal structure isn't reachable
-   via plain utility classes on the wrapper. */
-.phteahnisit-table :deep(.p-datatable-thead > tr > th) {
-  background: var(--color-brand-50);
-  color: var(--color-brand-800);
-  border-color: var(--color-brand-100);
-  font-weight: 600;
-}
+<!--
+  Phase 10.2: the DataTable/Paginator brand skin that used to live here
+  as a scoped `.phteahnisit-table :deep()` block has moved to a global,
+  unscoped rule in src/assets/styles/main.css (targeting `.p-datatable-*`
+  / `.p-paginator` directly) so every DataTable and Paginator in the app
+  picks it up automatically instead of needing it re-declared per view.
+  The two `var(--color-surface)` references that lived in that block
+  (the only real usages of that token anywhere in src/) are now literal
+  `#fff` in main.css's global rule - identical rendered color, one fewer
+  single-purpose token.
+-->
 
-.phteahnisit-table :deep(.p-datatable-tbody > tr) {
-  background: var(--color-surface);
-}
-
-.phteahnisit-table :deep(.p-datatable-tbody > tr > td) {
-  border-color: var(--color-brand-100);
-}
-
-.phteahnisit-table :deep(.p-datatable-tbody > tr:hover) {
-  background: var(--color-brand-50);
-}
-
-.phteahnisit-table :deep(.p-paginator) {
-  background: var(--color-surface);
-  border-color: var(--color-brand-100);
-}
-</style>

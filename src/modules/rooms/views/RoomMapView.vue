@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import roomService from '@/services/room.service'
-import ProgressSpinner from 'primevue/progressspinner'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const { t } = useI18n()
 const toast = useToast()
@@ -32,11 +32,11 @@ onMounted(load)
 
 <template>
   <div class="mx-auto max-w-3xl px-4 py-8">
-    <h1 class="mb-1 text-xl font-semibold text-brand-900">{{ t('room.mapTitle') }}</h1>
+    <h1 class="mb-1 text-h1 text-brand-900">{{ t('room.mapTitle') }}</h1>
     <p class="mb-6 text-sm text-brand-500">{{ t('room.mapHint') }}</p>
 
     <div v-if="loading" class="grid place-items-center py-20">
-      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" :stroke-width="4" />
+      <LoadingSpinner />
     </div>
 
     <div v-else-if="rooms.length === 0" class="rounded-card border border-dashed border-brand-200 py-16 text-center text-brand-500">
@@ -49,12 +49,12 @@ onMounted(load)
           <i class="pi pi-map-marker" />
         </span>
         <div class="min-w-0 flex-1">
-          <router-link :to="{ name: 'room-detail', params: { id: room.id } }" class="font-medium text-brand-900 hover:underline">
+          <router-link :to="{ name: 'room-detail', params: { id: room.id } }" class="font-medium text-brand-900 hover:underline focus-visible:underline">
             {{ room.title }}
           </router-link>
           <p class="truncate text-sm text-brand-500">{{ room.district }}, {{ room.province }} &middot; ${{ Number(room.price).toFixed(0) }}{{ t('room.perMonthShort') }}</p>
         </div>
-        <a :href="directionsUrl(room)" target="_blank" rel="noopener" class="shrink-0 text-sm font-medium text-brand-700 hover:underline">
+        <a :href="directionsUrl(room)" target="_blank" rel="noopener" class="shrink-0 text-sm font-medium text-brand-700 hover:underline focus-visible:underline">
           {{ t('room.openInMaps') }}
         </a>
       </div>

@@ -6,7 +6,7 @@ const { t } = useI18n()
 
 <template>
   <div class="mx-auto max-w-sm px-4 py-16">
-    <h1 class="mb-6 text-xl font-semibold text-brand-900">{{ t('nav.registerLandlord') }}</h1>
+    <h1 class="mb-6 text-h1 text-brand-900">{{ t('nav.registerLandlord') }}</h1>
     <RegisterForm role="landlord" />
   </div>
 </template>

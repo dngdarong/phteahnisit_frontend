@@ -8,7 +8,7 @@ import RoomCard from '@/components/RoomCard.vue'
 import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
 import Paginator from 'primevue/paginator'
-import ProgressSpinner from 'primevue/progressspinner'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const { t } = useI18n()
 const toast = useToast()
@@ -93,7 +93,7 @@ onMounted(load)
       />
       <router-link
         :to="{ name: 'room-map' }"
-        class="flex items-center justify-center gap-1.5 rounded-md border border-brand-200 px-3 py-2 text-sm font-medium text-brand-700 hover:bg-brand-50 sm:w-auto"
+        class="flex items-center justify-center gap-1.5 rounded-full border border-brand-200 px-3 py-2 text-sm font-medium text-brand-700 transition-colors duration-[var(--motion-fast)] hover:bg-brand-50 focus-visible:bg-brand-50 sm:w-auto"
       >
         <i class="pi pi-map-marker" />
         {{ t('room.viewOnMap') }}
@@ -101,7 +101,7 @@ onMounted(load)
     </div>
 
     <div v-if="loading" class="grid place-items-center py-20">
-      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" :stroke-width="4" />
+      <LoadingSpinner />
     </div>
 
     <div v-else-if="rooms.length === 0" class="rounded-card border border-dashed border-brand-200 py-16 text-center">

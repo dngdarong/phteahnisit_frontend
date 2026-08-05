@@ -44,7 +44,7 @@ async function toggleFavorite(event) {
 <template>
   <router-link
     :to="{ name: 'room-detail', params: { id: room.id } }"
-    class="group block overflow-hidden rounded-card border border-brand-100 bg-white transition hover:-translate-y-0.5 hover:shadow-md focus-visible:-translate-y-0.5"
+    class="group block overflow-hidden rounded-card border border-brand-100 bg-white transition duration-[var(--motion-base)] ease-[var(--motion-ease-standard)] hover:-translate-y-0.5 hover:shadow-md focus-visible:-translate-y-0.5"
   >
     <div class="relative aspect-[4/3] bg-brand-50">
       <img

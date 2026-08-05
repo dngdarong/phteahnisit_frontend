@@ -7,7 +7,7 @@ import { useToast } from 'primevue/usetoast'
 import roomService from '@/services/room.service'
 import RoomCard from '@/components/RoomCard.vue'
 import Button from 'primevue/button'
-import ProgressSpinner from 'primevue/progressspinner'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -53,12 +53,12 @@ onMounted(load)
 <template>
   <div class="mx-auto max-w-6xl px-4 py-8">
     <div class="mb-6 flex items-center justify-between">
-      <h1 class="text-xl font-semibold text-brand-900">{{ t('nav.myRooms') }}</h1>
+      <h1 class="text-h1 text-brand-900">{{ t('nav.myRooms') }}</h1>
       <Button :label="t('nav.postRoom')" icon="pi pi-plus" @click="router.push({ name: 'landlord-room-create' })" />
     </div>
 
     <div v-if="loading" class="grid place-items-center py-20">
-      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" :stroke-width="4" />
+      <LoadingSpinner />
     </div>
 
     <div v-else-if="rooms.length === 0" class="rounded-card border border-dashed border-brand-200 py-16 text-center">

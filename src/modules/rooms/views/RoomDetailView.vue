@@ -9,7 +9,7 @@ import favoriteService from '@/services/favorite.service'
 import bookingService from '@/services/booking.service'
 import chatService from '@/services/chat.service'
 import Button from 'primevue/button'
-import ProgressSpinner from 'primevue/progressspinner'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import Galleria from 'primevue/galleria'
 import DatePicker from 'primevue/datepicker'
 import InputNumber from 'primevue/inputnumber'
@@ -122,7 +122,7 @@ async function sendMessage() {
 <template>
   <div class="mx-auto max-w-4xl px-4 py-8">
     <div v-if="loading" class="grid place-items-center py-24">
-      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" :stroke-width="4" />
+      <LoadingSpinner />
     </div>
 
     <div v-else-if="notFound" class="py-24 text-center text-brand-600">
@@ -180,7 +180,7 @@ async function sendMessage() {
           <button
             v-if="auth.isStudent"
             type="button"
-            class="grid h-10 w-10 place-items-center rounded-full border border-brand-200 text-brand-700 hover:bg-brand-50"
+            class="grid h-10 w-10 place-items-center rounded-full border border-brand-200 text-brand-700 transition-colors duration-[var(--motion-fast)] hover:bg-brand-50 focus-visible:bg-brand-50"
             :aria-label="t('favorites.toggle')"
             :disabled="togglingFavorite"
             @click="toggleFavorite"

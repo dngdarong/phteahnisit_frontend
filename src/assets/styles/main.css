@@ -8,9 +8,13 @@
   accent (blended in, replacing the mockup's own mint-green/terracotta
   color story - see docs/FRONTEND_ARCHITECTURE.md v0.2 section). The
   `brand-*` scale below is v0.1's original green ramp, re-anchored to
-  the new `primary`/`primary-d`/`primary-l` values so every existing
-  `text-brand-900` / `bg-brand-50` / etc. class across the app keeps
-  working unchanged - only the shade shifts, not the token names.
+  the v0.2 sage-green shade so every existing `text-brand-900` /
+  `bg-brand-50` / etc. class across the app keeps working unchanged -
+  only the shade shifts, not the token names. It is the single source
+  of truth for the app's color system (see the Phase 10.2 note below
+  the ramp) - PrimeVue's Aura preset (primevue-preset.js) derives its
+  primary scale from these same CSS variables rather than duplicating
+  the hex values.
 
   Type: Hanuman (Khmer-capable, humanist, warm) paired with Be Vietnam
   Pro (geometric, friendly, wide Southeast-Asian language support) for
@@ -35,20 +39,22 @@
   --color-brand-800: #234a32;
   --color-brand-900: #1b3a28;
 
-  /* v0.2 named tokens, per the blended palette agreed with the design mockup. */
+  /*
+    Phase 10.2 (Theme Consolidation): the v0.2 named-token layer that used
+    to live here (--color-surface-2, --color-ink, --color-ink-2, --color-mute,
+    --color-line, --color-primary/-d/-l, --color-accent/-l) has been removed -
+    it was a second, unused color system with zero component references
+    anywhere in src/ (verified via grep). The `brand-*` ramp above is the
+    single source of truth for the app's primary/text/border color roles;
+    PrimeVue's Aura preset (primevue-preset.js) now derives its primary
+    scale from these same variables instead of duplicating the hex values.
+
+    --color-bg survives as the one genuinely-distinct semantic role the
+    brand-* ramp doesn't cover (the warm page background, visually
+    different from any card/surface white) - it's the app's single
+    "Background" token, still applied via `bg-bg` on <body> below.
+  */
   --color-bg: #f7f2e9;
-  --color-bg-2: #efe8da;
-  --color-surface: #ffffff;
-  --color-surface-2: #fbf6ec;
-  --color-ink: #211f1a;
-  --color-ink-2: #4a4538;
-  --color-mute: #857e70;
-  --color-line: #e7e0d0; /* design spec calls this "border" - named `line` here to avoid a border-border utility class */
-  --color-primary: #3f7d57;
-  --color-primary-d: #2c5c3e;
-  --color-primary-l: #dcebdf;
-  --color-accent: #c99a3d;
-  --color-accent-l: #f5e9ce;
 
   --color-status-pending: #b7791f;
   --color-status-pending-bg: #fdf3e0;
@@ -58,6 +64,113 @@
   --color-status-rejected-bg: #fbe9e9;
 
   --radius-card: 1rem;
+
+  /*
+    Page container convention (Phase 10.2 - documented, not renamed).
+
+    Every top-level page root is `mx-auto max-w-{X} px-4 py-{Y}`, using
+    Tailwind's own named max-w scale - already a single source of truth,
+    not ad hoc pixel values - clustered by content type:
+      max-w-sm   narrow single-column forms (Login, Register*, Profile)
+      max-w-md   narrow admin detail/forms (UserDetail, UserForm)
+      max-w-2xl  wider forms / chat (RoomForm, Conversations, chat thread)
+      max-w-3xl  single-column card lists (RoomMap, *BookingsView)
+      max-w-4xl  rich detail page (RoomDetail)
+      max-w-5xl  admin data table (UsersView)
+      max-w-6xl  card grids (RoomList, MyRooms, PendingRooms, Favorites)
+    Vertical padding is `py-8` everywhere except the 3 auth pages and
+    ProfileView (`py-16`/`py-12`) and the chat thread (`py-6`, a
+    full-height `h-[calc(100vh-4rem)]` layout, not a scrolling page).
+    Collapsing these further would either change a page's rendered width
+    (a visual regression, out of scope here) or replace already-standard
+    Tailwind scale classes with equivalent custom ones for no visual or
+    functional benefit - left as-is and documented for Phase 10.3+.
+  */
+
+  /*
+    Phase 10.1 (Design System Foundation) - typography scale.
+
+    Named font-size steps for the semantic roles used across the app
+    (Display/H1-H4/Body Large/Body/Small/Caption/Button/Label), each
+    paired with its line-height, weight and (where relevant) letter
+    spacing via Tailwind v4's `--text-{name}--{property}` theme-key
+    convention. This turns each row into a `text-{name}` utility
+    (e.g. `text-h1`) once a future phase opts a component into it.
+
+    Phase 10.2: the scattered `text-xl font-semibold text-brand-900`
+    page-heading pattern (13-15 top-level pages) now uses `text-h1` in
+    place of `text-xl font-semibold` (same brand-900 color, just the
+    size/weight/line-height come from this single token instead of two
+    ad hoc utilities). RoomDetailView.vue's larger `text-2xl` title and
+    RoomListView.vue (no page heading) were left untouched - both are
+    already deliberately differentiated, not part of the duplicated
+    pattern this scale targets.
+  */
+  --text-display: 2.5rem;
+  --text-display--line-height: 1.15;
+  --text-display--letter-spacing: -0.01em;
+  --text-display--font-weight: 700;
+
+  --text-h1: 1.875rem;
+  --text-h1--line-height: 1.2;
+  --text-h1--font-weight: 700;
+
+  --text-h2: 1.5rem;
+  --text-h2--line-height: 1.25;
+  --text-h2--font-weight: 600;
+
+  --text-h3: 1.25rem;
+  --text-h3--line-height: 1.3;
+  --text-h3--font-weight: 600;
+
+  --text-h4: 1.125rem;
+  --text-h4--line-height: 1.35;
+  --text-h4--font-weight: 600;
+
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.6;
+  --text-body-lg--font-weight: 400;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+  --text-body--font-weight: 400;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-small--font-weight: 400;
+
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.4;
+  --text-caption--font-weight: 400;
+
+  --text-button: 0.875rem;
+  --text-button--line-height: 1;
+  --text-button--font-weight: 600;
+
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.3;
+  --text-label--font-weight: 500;
+}
+
+/*
+  Motion standards (Phase 10.1 foundation, wired in during Phase 10.2).
+
+  Named outside `@theme` deliberately: Tailwind v4 already owns the
+  `--default-transition-duration` / `--default-transition-timing-function`
+  keys that the bare `transition` utility reads from, so redefining those
+  specific keys here would silently change every already-shipped
+  `transition` utility's speed app-wide. These are new, non-colliding
+  names instead - explicit `duration-[var(--motion-*)]` /
+  `ease-[var(--motion-ease-standard)]` utilities reference them directly
+  on the specific elements this phase touches (RoomCard.vue's hover
+  lift, and the hover/focus-visible parity added to chat/map list rows),
+  rather than changing the app-wide `transition` default.
+*/
+:root {
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 320ms;
+  --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 html {
@@ -91,6 +204,41 @@ body {
 */
 #p-license-host {
   display: none !important;
+}
+
+/*
+  Global PrimeVue DataTable / Paginator brand skin (Phase 10.2).
+
+  Previously a 30-line `:deep()` override living only in UsersView.vue's
+  <style scoped>, matched against a `.phteahnisit-table` class applied to
+  just that one DataTable. Moved here, unscoped, so every DataTable and
+  every standalone Paginator in the app (e.g. RoomListView.vue's search
+  results Paginator, which previously rendered unmodified PrimeVue Aura
+  gray) gets the same brand treatment automatically instead of needing
+  the override copy-pasted per view.
+*/
+.p-datatable-thead > tr > th {
+  background: var(--color-brand-50);
+  color: var(--color-brand-800);
+  border-color: var(--color-brand-100);
+  font-weight: 600;
+}
+
+.p-datatable-tbody > tr {
+  background: #fff;
+}
+
+.p-datatable-tbody > tr > td {
+  border-color: var(--color-brand-100);
+}
+
+.p-datatable-tbody > tr:hover {
+  background: var(--color-brand-50);
+}
+
+.p-paginator {
+  background: #fff;
+  border-color: var(--color-brand-100);
 }
 
 @media (prefers-reduced-motion: reduce) {

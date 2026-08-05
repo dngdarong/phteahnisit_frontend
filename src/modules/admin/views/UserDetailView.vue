@@ -5,7 +5,8 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import userService from '@/services/user.service'
 import Button from 'primevue/button'
-import ProgressSpinner from 'primevue/progressspinner'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import StatusBadge from '@/components/StatusBadge.vue'
 
 const props = defineProps({ id: { type: [String, Number], required: true } })
 const { t } = useI18n()
@@ -34,12 +35,12 @@ onMounted(load)
 <template>
   <div class="mx-auto max-w-md px-4 py-8">
     <div v-if="loading" class="grid place-items-center py-24">
-      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" :stroke-width="4" />
+      <LoadingSpinner />
     </div>
 
     <template v-else-if="user">
       <div class="mb-6 flex items-center justify-between">
-        <h1 class="text-xl font-semibold text-brand-900">{{ user.name }}</h1>
+        <h1 class="text-h1 text-brand-900">{{ user.name }}</h1>
         <span class="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700">
           {{ t(`admin.roles.${user.role}`) }}
         </span>
@@ -56,14 +57,7 @@ onMounted(load)
         </div>
         <div class="flex justify-between text-sm">
           <span class="text-brand-500">{{ t('admin.status') }}</span>
-          <span
-            class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
-            :class="user.status === 'active'
-              ? 'bg-[var(--color-status-approved-bg)] text-[var(--color-status-approved)]'
-              : 'bg-[var(--color-status-rejected-bg)] text-[var(--color-status-rejected)]'"
-          >
-            {{ t(`admin.statuses.${user.status}`) }}
-          </span>
+          <StatusBadge domain="user" :status="user.status" />
         </div>
         <div v-if="user.rooms_count !== undefined" class="flex justify-between text-sm">
           <span class="text-brand-500">{{ t('admin.roomsCount') }}</span>

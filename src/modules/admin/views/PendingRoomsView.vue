@@ -7,7 +7,7 @@ import RoomCard from '@/components/RoomCard.vue'
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 import Textarea from 'primevue/textarea'
-import ProgressSpinner from 'primevue/progressspinner'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const { t } = useI18n()
 const toast = useToast()
@@ -70,10 +70,10 @@ onMounted(load)
 
 <template>
   <div class="mx-auto max-w-6xl px-4 py-8">
-    <h1 class="mb-6 text-xl font-semibold text-brand-900">{{ t('nav.pendingApprovals') }}</h1>
+    <h1 class="mb-6 text-h1 text-brand-900">{{ t('nav.pendingApprovals') }}</h1>
 
     <div v-if="loading" class="grid place-items-center py-20">
-      <ProgressSpinner style="width: 2.5rem; height: 2.5rem" :stroke-width="4" />
+      <LoadingSpinner />
     </div>
 
     <div v-else-if="rooms.length === 0" class="rounded-card border border-dashed border-brand-200 py-16 text-center text-brand-500">

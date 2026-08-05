@@ -45,28 +45,28 @@ async function submit() {
 <template>
   <form class="space-y-4" @submit.prevent="submit">
     <div>
-      <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.name') }}</label>
-      <InputText v-model="form.name" class="w-full" required />
+      <label for="register-name" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.name') }}</label>
+      <InputText id="register-name" v-model="form.name" class="w-full" required />
       <small v-if="errors.name" class="text-status-rejected">{{ errors.name[0] }}</small>
     </div>
     <div>
-      <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.email') }}</label>
-      <InputText v-model="form.email" type="email" class="w-full" required autocomplete="email" />
+      <label for="register-email" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.email') }}</label>
+      <InputText id="register-email" v-model="form.email" type="email" class="w-full" required autocomplete="email" />
       <small v-if="errors.email" class="text-status-rejected">{{ errors.email[0] }}</small>
     </div>
     <div>
-      <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.phone') }}</label>
-      <InputText v-model="form.phone" class="w-full" placeholder="012345678" required />
+      <label for="register-phone" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.phone') }}</label>
+      <InputText id="register-phone" v-model="form.phone" class="w-full" placeholder="012345678" required />
       <small v-if="errors.phone" class="text-status-rejected">{{ errors.phone[0] }}</small>
     </div>
     <div>
-      <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.password') }}</label>
-      <Password v-model="form.password" class="w-full" input-class="w-full" toggle-mask required autocomplete="new-password" />
+      <label for="register-password" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.password') }}</label>
+      <Password input-id="register-password" v-model="form.password" class="w-full" input-class="w-full" toggle-mask required autocomplete="new-password" />
       <small v-if="errors.password" class="text-status-rejected">{{ errors.password[0] }}</small>
     </div>
     <div>
-      <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.passwordConfirm') }}</label>
-      <Password v-model="form.password_confirmation" class="w-full" input-class="w-full" :feedback="false" toggle-mask required autocomplete="new-password" />
+      <label for="register-password-confirm" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.passwordConfirm') }}</label>
+      <Password input-id="register-password-confirm" v-model="form.password_confirmation" class="w-full" input-class="w-full" :feedback="false" toggle-mask required autocomplete="new-password" />
     </div>
 
     <Message v-if="errors.general" severity="error" :closable="false">{{ errors.general[0] }}</Message>
