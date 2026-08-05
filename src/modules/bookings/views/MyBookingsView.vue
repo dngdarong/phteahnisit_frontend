@@ -7,6 +7,7 @@ import bookingService from '@/services/booking.service'
 import Button from 'primevue/button'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
+import EmptyState from '@/components/EmptyState.vue'
 
 const { t } = useI18n()
 const confirm = useConfirm()
@@ -56,10 +57,7 @@ onMounted(load)
       <LoadingSpinner />
     </div>
 
-    <div v-else-if="bookings.length === 0" class="rounded-card border border-dashed border-brand-200 py-16 text-center">
-      <i class="pi pi-calendar mb-3 text-3xl text-brand-300" />
-      <p class="font-medium text-brand-800">{{ t('booking.noneYet') }}</p>
-    </div>
+    <EmptyState v-else-if="bookings.length === 0" icon="pi-calendar" :title="t('booking.noneYet')" />
 
     <div v-else class="space-y-3">
       <div v-for="booking in bookings" :key="booking.id" class="rounded-card border border-brand-100 p-5">

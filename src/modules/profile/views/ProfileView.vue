@@ -8,6 +8,7 @@ import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
 import Button from 'primevue/button'
 import Message from 'primevue/message'
+import FormField from '@/components/FormField.vue'
 
 const { t } = useI18n()
 const toast = useToast()
@@ -57,39 +58,28 @@ async function submit() {
     <h1 class="mb-6 text-h1 text-brand-900">{{ t('nav.profile') }}</h1>
 
     <form class="space-y-4" @submit.prevent="submit">
-      <div>
-        <label for="profile-name" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.name') }}</label>
+      <FormField :label="t('auth.name')" input-id="profile-name" :error="errors.name?.[0]">
         <InputText id="profile-name" v-model="form.name" class="w-full" />
-        <small v-if="errors.name" class="text-status-rejected">{{ errors.name[0] }}</small>
-      </div>
-      <div>
-        <label for="profile-email" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.email') }}</label>
+      </FormField>
+      <FormField :label="t('auth.email')" input-id="profile-email" :error="errors.email?.[0]">
         <InputText id="profile-email" v-model="form.email" type="email" class="w-full" />
-        <small v-if="errors.email" class="text-status-rejected">{{ errors.email[0] }}</small>
-      </div>
-      <div>
-        <label for="profile-phone" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.phone') }}</label>
+      </FormField>
+      <FormField :label="t('auth.phone')" input-id="profile-phone" :error="errors.phone?.[0]">
         <InputText id="profile-phone" v-model="form.phone" class="w-full" />
-        <small v-if="errors.phone" class="text-status-rejected">{{ errors.phone[0] }}</small>
-      </div>
+      </FormField>
 
       <hr class="border-brand-100" />
       <p class="text-sm font-medium text-brand-700">{{ t('auth.changePasswordOptional') }}</p>
 
-      <div>
-        <label for="profile-current-password" class="mb-1 block text-sm text-brand-600">{{ t('auth.currentPassword') }}</label>
+      <FormField :label="t('auth.currentPassword')" input-id="profile-current-password" variant="subtle" :error="errors.current_password?.[0]">
         <Password input-id="profile-current-password" v-model="form.current_password" class="w-full" input-class="w-full" :feedback="false" toggle-mask />
-        <small v-if="errors.current_password" class="text-status-rejected">{{ errors.current_password[0] }}</small>
-      </div>
-      <div>
-        <label for="profile-password" class="mb-1 block text-sm text-brand-600">{{ t('auth.password') }}</label>
+      </FormField>
+      <FormField :label="t('auth.password')" input-id="profile-password" variant="subtle" :error="errors.password?.[0]">
         <Password input-id="profile-password" v-model="form.password" class="w-full" input-class="w-full" toggle-mask />
-        <small v-if="errors.password" class="text-status-rejected">{{ errors.password[0] }}</small>
-      </div>
-      <div>
-        <label for="profile-password-confirm" class="mb-1 block text-sm text-brand-600">{{ t('auth.passwordConfirm') }}</label>
+      </FormField>
+      <FormField :label="t('auth.passwordConfirm')" input-id="profile-password-confirm" variant="subtle">
         <Password input-id="profile-password-confirm" v-model="form.password_confirmation" class="w-full" input-class="w-full" :feedback="false" toggle-mask />
-      </div>
+      </FormField>
 
       <Message v-if="errors.general" severity="error" :closable="false">{{ errors.general[0] }}</Message>
 

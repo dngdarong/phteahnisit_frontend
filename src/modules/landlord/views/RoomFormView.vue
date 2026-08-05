@@ -13,6 +13,7 @@ import FileUpload from 'primevue/fileupload'
 import Button from 'primevue/button'
 import Message from 'primevue/message'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import FormField from '@/components/FormField.vue'
 
 const props = defineProps({ id: { type: [String, Number], default: null } })
 const isEdit = computed(() => !!props.id)
@@ -133,59 +134,43 @@ onMounted(() => {
     </div>
 
     <form v-else class="space-y-4" @submit.prevent="submit">
-      <div>
-        <label for="room-form-title" class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.title') }}</label>
+      <FormField :label="t('room.title')" input-id="room-form-title" :error="errors.title?.[0]">
         <InputText id="room-form-title" v-model="form.title" class="w-full" required />
-        <small v-if="errors.title" class="text-status-rejected">{{ errors.title[0] }}</small>
-      </div>
+      </FormField>
 
-      <div>
-        <label for="room-form-description" class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.description') }}</label>
+      <FormField :label="t('room.description')" input-id="room-form-description" :error="errors.description?.[0]">
         <Textarea id="room-form-description" v-model="form.description" class="w-full" rows="4" required />
-        <small v-if="errors.description" class="text-status-rejected">{{ errors.description[0] }}</small>
-      </div>
+      </FormField>
 
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div>
-          <label for="room-form-price" class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.price') }} (USD/mo)</label>
+        <FormField :label="`${t('room.price')} (USD/mo)`" input-id="room-form-price" :error="errors.price?.[0]">
           <InputNumber input-id="room-form-price" v-model="form.price" class="w-full" mode="currency" currency="USD" :min="0.01" required />
-          <small v-if="errors.price" class="text-status-rejected">{{ errors.price[0] }}</small>
-        </div>
-        <div>
-          <label for="room-form-type" class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.roomType') }}</label>
+        </FormField>
+        <FormField :label="t('room.roomType')" input-id="room-form-type">
           <Select input-id="room-form-type" v-model="form.room_type" :options="roomTypes" option-label="label" option-value="value" class="w-full" />
-        </div>
+        </FormField>
       </div>
 
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div>
-          <label for="room-form-province" class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.province') }}</label>
+        <FormField :label="t('room.province')" input-id="room-form-province" :error="errors.province?.[0]">
           <Select input-id="room-form-province" v-model="form.province" :options="provinces" class="w-full" required />
-          <small v-if="errors.province" class="text-status-rejected">{{ errors.province[0] }}</small>
-        </div>
-        <div>
-          <label for="room-form-district" class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.district') }}</label>
+        </FormField>
+        <FormField :label="t('room.district')" input-id="room-form-district">
           <InputText id="room-form-district" v-model="form.district" class="w-full" required />
-        </div>
+        </FormField>
       </div>
 
-      <div>
-        <label for="room-form-address" class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.address') }}</label>
+      <FormField :label="t('room.address')" input-id="room-form-address" :error="errors.address?.[0]">
         <InputText id="room-form-address" v-model="form.address" class="w-full" required />
-        <small v-if="errors.address" class="text-status-rejected">{{ errors.address[0] }}</small>
-      </div>
+      </FormField>
 
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div>
-          <label for="room-form-latitude" class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.latitude') }}</label>
+        <FormField :label="t('room.latitude')" input-id="room-form-latitude" :error="errors.latitude?.[0]">
           <InputNumber input-id="room-form-latitude" v-model="form.latitude" class="w-full" :min-fraction-digits="0" :max-fraction-digits="7" :min="-90" :max="90" />
-          <small v-if="errors.latitude" class="text-status-rejected">{{ errors.latitude[0] }}</small>
-        </div>
-        <div>
-          <label for="room-form-longitude" class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.longitude') }}</label>
+        </FormField>
+        <FormField :label="t('room.longitude')" input-id="room-form-longitude" :error="errors.longitude?.[0]">
           <InputNumber input-id="room-form-longitude" v-model="form.longitude" class="w-full" :min-fraction-digits="0" :max-fraction-digits="7" :min="-180" :max="180" />
-          <small v-if="errors.longitude" class="text-status-rejected">{{ errors.longitude[0] }}</small>
-        </div>
+        </FormField>
       </div>
       <p class="-mt-2 text-xs text-brand-500">{{ t('room.locationHint') }}</p>
 
@@ -194,11 +179,10 @@ onMounted(() => {
         <label for="room-form-available" class="text-sm text-brand-700">{{ t('room.available') }}</label>
       </div>
 
-      <div>
-        <!-- FileUpload is a composite widget with no `inputId` prop to pair a
-             <label for> against (its real <input type=file> is hidden/synthetic) -
-             left as a visual section label, same as before this phase. -->
-        <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('room.photos') }}</label>
+      <!-- FileUpload is a composite widget with no `inputId` prop to pair a
+           <label for> against (its real <input type=file> is hidden/synthetic) -
+           left as a visual section label, same as before this phase. -->
+      <FormField :label="t('room.photos')" :error="errors.images?.[0]">
         <FileUpload
           mode="basic"
           multiple
@@ -207,8 +191,7 @@ onMounted(() => {
           :choose-label="t('room.choosePhotos')"
           @select="onFilesSelect"
         />
-        <small v-if="errors.images" class="text-status-rejected">{{ errors.images[0] }}</small>
-      </div>
+      </FormField>
 
       <Message v-if="errors.general" severity="error" :closable="false">{{ errors.general[0] }}</Message>
 

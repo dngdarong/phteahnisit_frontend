@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import roomService from '@/services/room.service'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import EmptyState from '@/components/EmptyState.vue'
 
 const { t } = useI18n()
 const toast = useToast()
@@ -39,9 +40,7 @@ onMounted(load)
       <LoadingSpinner />
     </div>
 
-    <div v-else-if="rooms.length === 0" class="rounded-card border border-dashed border-brand-200 py-16 text-center text-brand-500">
-      {{ t('room.noPinnedRooms') }}
-    </div>
+    <EmptyState v-else-if="rooms.length === 0" variant="plain" :title="t('room.noPinnedRooms')" />
 
     <div v-else class="space-y-3">
       <div v-for="room in rooms" :key="room.id" class="flex items-center gap-3 rounded-card border border-brand-100 p-4">

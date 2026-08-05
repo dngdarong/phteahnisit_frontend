@@ -9,6 +9,7 @@ import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
 import Paginator from 'primevue/paginator'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import EmptyState from '@/components/EmptyState.vue'
 
 const { t } = useI18n()
 const toast = useToast()
@@ -104,11 +105,7 @@ onMounted(load)
       <LoadingSpinner />
     </div>
 
-    <div v-else-if="rooms.length === 0" class="rounded-card border border-dashed border-brand-200 py-16 text-center">
-      <i class="pi pi-search mb-3 text-3xl text-brand-300" />
-      <p class="font-medium text-brand-800">{{ t('room.noResults') }}</p>
-      <p class="text-sm text-brand-500">{{ t('room.noResultsHint') }}</p>
-    </div>
+    <EmptyState v-else-if="rooms.length === 0" icon="pi-search" :title="t('room.noResults')" :hint="t('room.noResultsHint')" />
 
     <div v-else class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
       <RoomCard v-for="room in rooms" :key="room.id" :room="room" :show-favorite="auth.isStudent" />

@@ -5,6 +5,7 @@ import { useToast } from 'primevue/usetoast'
 import favoriteService from '@/services/favorite.service'
 import RoomCard from '@/components/RoomCard.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import EmptyState from '@/components/EmptyState.vue'
 
 const { t } = useI18n()
 const toast = useToast()
@@ -39,11 +40,7 @@ onMounted(load)
       <LoadingSpinner />
     </div>
 
-    <div v-else-if="rooms.length === 0" class="rounded-card border border-dashed border-brand-200 py-16 text-center">
-      <i class="pi pi-heart mb-3 text-3xl text-brand-300" />
-      <p class="font-medium text-brand-800">{{ t('favorites.empty') }}</p>
-      <p class="text-sm text-brand-500">{{ t('favorites.emptyHint') }}</p>
-    </div>
+    <EmptyState v-else-if="rooms.length === 0" icon="pi-heart" :title="t('favorites.empty')" :hint="t('favorites.emptyHint')" />
 
     <div v-else class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
       <RoomCard

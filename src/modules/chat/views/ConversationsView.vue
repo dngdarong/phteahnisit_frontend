@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import chatService from '@/services/chat.service'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import EmptyState from '@/components/EmptyState.vue'
 import Badge from 'primevue/badge'
 
 const { t } = useI18n()
@@ -35,9 +36,7 @@ onMounted(load)
       <LoadingSpinner />
     </div>
 
-    <div v-else-if="conversations.length === 0" class="rounded-card border border-dashed border-brand-200 py-16 text-center text-brand-500">
-      {{ t('chat.noConversations') }}
-    </div>
+    <EmptyState v-else-if="conversations.length === 0" variant="plain" :title="t('chat.noConversations')" />
 
     <div v-else class="divide-y divide-brand-100 overflow-hidden rounded-card border border-brand-100">
       <router-link

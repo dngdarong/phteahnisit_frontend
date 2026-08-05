@@ -8,6 +8,7 @@ import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
 import Button from 'primevue/button'
 import Message from 'primevue/message'
+import FormField from '@/components/FormField.vue'
 
 const props = defineProps({
   role: { type: String, required: true }, // 'student' | 'landlord'
@@ -44,30 +45,21 @@ async function submit() {
 
 <template>
   <form class="space-y-4" @submit.prevent="submit">
-    <div>
-      <label for="register-name" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.name') }}</label>
+    <FormField :label="t('auth.name')" input-id="register-name" :error="errors.name?.[0]">
       <InputText id="register-name" v-model="form.name" class="w-full" required />
-      <small v-if="errors.name" class="text-status-rejected">{{ errors.name[0] }}</small>
-    </div>
-    <div>
-      <label for="register-email" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.email') }}</label>
+    </FormField>
+    <FormField :label="t('auth.email')" input-id="register-email" :error="errors.email?.[0]">
       <InputText id="register-email" v-model="form.email" type="email" class="w-full" required autocomplete="email" />
-      <small v-if="errors.email" class="text-status-rejected">{{ errors.email[0] }}</small>
-    </div>
-    <div>
-      <label for="register-phone" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.phone') }}</label>
+    </FormField>
+    <FormField :label="t('auth.phone')" input-id="register-phone" :error="errors.phone?.[0]">
       <InputText id="register-phone" v-model="form.phone" class="w-full" placeholder="012345678" required />
-      <small v-if="errors.phone" class="text-status-rejected">{{ errors.phone[0] }}</small>
-    </div>
-    <div>
-      <label for="register-password" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.password') }}</label>
+    </FormField>
+    <FormField :label="t('auth.password')" input-id="register-password" :error="errors.password?.[0]">
       <Password input-id="register-password" v-model="form.password" class="w-full" input-class="w-full" toggle-mask required autocomplete="new-password" />
-      <small v-if="errors.password" class="text-status-rejected">{{ errors.password[0] }}</small>
-    </div>
-    <div>
-      <label for="register-password-confirm" class="mb-1 block text-sm font-medium text-brand-700">{{ t('auth.passwordConfirm') }}</label>
+    </FormField>
+    <FormField :label="t('auth.passwordConfirm')" input-id="register-password-confirm">
       <Password input-id="register-password-confirm" v-model="form.password_confirmation" class="w-full" input-class="w-full" :feedback="false" toggle-mask required autocomplete="new-password" />
-    </div>
+    </FormField>
 
     <Message v-if="errors.general" severity="error" :closable="false">{{ errors.general[0] }}</Message>
 

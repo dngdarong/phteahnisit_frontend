@@ -15,6 +15,7 @@ import DatePicker from 'primevue/datepicker'
 import InputNumber from 'primevue/inputnumber'
 import Textarea from 'primevue/textarea'
 import Message from 'primevue/message'
+import FormField from '@/components/FormField.vue'
 
 const props = defineProps({ id: { type: [String, Number], required: true } })
 const { t } = useI18n()
@@ -236,16 +237,12 @@ async function sendMessage() {
         </div>
 
         <form v-if="showBookingForm" class="mt-4 space-y-4" @submit.prevent="submitBooking">
-          <div>
-            <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('booking.moveInDate') }}</label>
-            <DatePicker v-model="bookingForm.move_in_date" class="w-full" show-icon :min-date="new Date()" />
-            <small v-if="bookingErrors.move_in_date" class="text-status-rejected">{{ bookingErrors.move_in_date[0] }}</small>
-          </div>
-          <div>
-            <label class="mb-1 block text-sm font-medium text-brand-700">{{ t('booking.durationMonths') }}</label>
-            <InputNumber v-model="bookingForm.duration_months" class="w-full" :min="1" :max="36" show-buttons />
-            <small v-if="bookingErrors.duration_months" class="text-status-rejected">{{ bookingErrors.duration_months[0] }}</small>
-          </div>
+          <FormField :label="t('booking.moveInDate')" input-id="booking-move-in-date" :error="bookingErrors.move_in_date?.[0]">
+            <DatePicker input-id="booking-move-in-date" v-model="bookingForm.move_in_date" class="w-full" show-icon :min-date="new Date()" />
+          </FormField>
+          <FormField :label="t('booking.durationMonths')" input-id="booking-duration-months" :error="bookingErrors.duration_months?.[0]">
+            <InputNumber input-id="booking-duration-months" v-model="bookingForm.duration_months" class="w-full" :min="1" :max="36" show-buttons />
+          </FormField>
           <Message v-if="bookingErrors.room" severity="error" :closable="false">{{ bookingErrors.room[0] }}</Message>
           <Message v-if="bookingErrors.general" severity="error" :closable="false">{{ bookingErrors.general[0] }}</Message>
           <div class="flex gap-2">

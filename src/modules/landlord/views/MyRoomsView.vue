@@ -8,6 +8,7 @@ import roomService from '@/services/room.service'
 import RoomCard from '@/components/RoomCard.vue'
 import Button from 'primevue/button'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import EmptyState from '@/components/EmptyState.vue'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -61,10 +62,7 @@ onMounted(load)
       <LoadingSpinner />
     </div>
 
-    <div v-else-if="rooms.length === 0" class="rounded-card border border-dashed border-brand-200 py-16 text-center">
-      <p class="font-medium text-brand-800">{{ t('room.noResults') }}</p>
-      <p class="text-sm text-brand-500">{{ t('room.postFirstHint') }}</p>
-    </div>
+    <EmptyState v-else-if="rooms.length === 0" :title="t('room.noResults')" :hint="t('room.postFirstHint')" />
 
     <div v-else class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
       <div v-for="room in rooms" :key="room.id" class="space-y-2">

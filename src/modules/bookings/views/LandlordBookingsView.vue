@@ -5,9 +5,9 @@ import { useToast } from 'primevue/usetoast'
 import bookingService from '@/services/booking.service'
 import Button from 'primevue/button'
 import StatusBadge from '@/components/StatusBadge.vue'
-import Dialog from 'primevue/dialog'
-import Textarea from 'primevue/textarea'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import EmptyState from '@/components/EmptyState.vue'
+import RejectDialog from '@/components/RejectDialog.vue'
 
 const { t } = useI18n()
 const toast = useToast()
@@ -77,9 +77,7 @@ onMounted(load)
       <LoadingSpinner />
     </div>
 
-    <div v-else-if="bookings.length === 0" class="rounded-card border border-dashed border-brand-200 py-16 text-center text-brand-500">
-      {{ t('booking.noneToReview') }}
-    </div>
+    <EmptyState v-else-if="bookings.length === 0" variant="plain" :title="t('booking.noneToReview')" />
 
     <div v-else class="space-y-3">
       <div v-for="booking in bookings" :key="booking.id" class="rounded-card border border-brand-100 p-5">
@@ -118,13 +116,15 @@ onMounted(load)
       </div>
     </div>
 
-    <Dialog v-model:visible="rejectDialogBooking" modal :header="t('booking.rejectBooking')" :style="{ width: '28rem' }">
-      <p class="mb-3 text-sm text-brand-600">{{ t('room.rejectReasonHint') }}</p>
-      <Textarea v-model="rejectReason" class="w-full" rows="3" />
-      <template #footer>
-        <Button :label="t('common.cancel')" text :disabled="rejecting" @click="rejectDialogBooking = null" />
-        <Button :label="t('room.reject')" severity="danger" :loading="rejecting" @click="confirmReject" />
-      </template>
-    </Dialog>
+    <RejectDialog
+      :visible="!!rejectDialogBooking"
+      v-model:reason="rejectReason"
+      :header="t('booking.rejectBooking')"
+      :hint="t('room.rejectReasonHint')"
+      :loading="rejecting"
+      @update:visible="(v) => !v && (rejectDialogBooking = null)"
+      @cancel="rejectDialogBooking = null"
+      @confirm="confirmReject"
+    />
   </div>
 </template>
