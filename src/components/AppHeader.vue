@@ -30,13 +30,6 @@ const menuItems = computed(() => {
       { label: t('nav.myRooms'), icon: 'pi pi-home', command: () => router.push({ name: 'landlord-rooms' }) },
     )
   }
-  if (auth.isAdmin) {
-    items.unshift(
-      { label: t('nav.users'), icon: 'pi pi-users', command: () => router.push({ name: 'admin-users' }) },
-      { label: t('nav.pendingApprovals'), icon: 'pi pi-check-square', command: () => router.push({ name: 'admin-rooms' }) },
-    )
-  }
-
   items.push({
     label: t('nav.logout'),
     icon: 'pi pi-sign-out',

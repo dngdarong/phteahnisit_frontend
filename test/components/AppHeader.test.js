@@ -28,15 +28,15 @@ describe('AppHeader', () => {
     expect(wrapper.text()).not.toContain('Log in')
   })
 
-  it('includes role-specific menu items for a student vs. an admin', () => {
+  it('includes role-specific menu items for a landlord vs. a student', () => {
     const auth = useAuthStore(createTestingPinia({ stubActions: false, initialState: { auth: { user: { role: 'student' }, token: 'tok-1' } } }))
     expect(auth.isStudent).toBe(true)
 
-    const wrapper = mountHeader({ id: 1, role: 'admin', name: 'Admin' })
+    const wrapper = mountHeader({ id: 1, role: 'landlord', name: 'Bora' })
     const menu = wrapper.findComponent({ name: 'Menu' })
     const labels = menu.props('model').map((item) => item.label)
-    expect(labels).toContain('Users')
-    expect(labels).toContain('Pending approvals')
-    expect(labels).not.toContain('My bookings') // admin, not student
+    expect(labels).toContain('My rooms')
+    expect(labels).toContain('Booking requests')
+    expect(labels).not.toContain('My bookings') // landlord, not student
   })
 })

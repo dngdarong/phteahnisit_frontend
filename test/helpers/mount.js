@@ -29,11 +29,6 @@ const routes = [
   { path: '/landlord/rooms/new', name: 'landlord-room-create', component: { template: '<div />' } },
   { path: '/landlord/rooms/:id/edit', name: 'landlord-room-edit', component: { template: '<div />' } },
   { path: '/landlord/bookings', name: 'landlord-bookings', component: { template: '<div />' } },
-  { path: '/admin/rooms', name: 'admin-rooms', component: { template: '<div />' } },
-  { path: '/admin/users', name: 'admin-users', component: { template: '<div />' } },
-  { path: '/admin/users/new', name: 'admin-user-create', component: { template: '<div />' } },
-  { path: '/admin/users/:id', name: 'admin-user-detail', component: { template: '<div />' } },
-  { path: '/admin/users/:id/edit', name: 'admin-user-edit', component: { template: '<div />' } },
 ]
 
 export function makeTestRouter() {

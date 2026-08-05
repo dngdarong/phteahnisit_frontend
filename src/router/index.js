@@ -98,40 +98,6 @@ const routes = [
     component: () => import('@/modules/bookings/views/LandlordBookingsView.vue'),
     meta: { requiresAuth: true, roles: ['landlord'] },
   },
-
-  // Admin
-  {
-    path: '/admin/rooms',
-    name: 'admin-rooms',
-    component: () => import('@/modules/admin/views/PendingRoomsView.vue'),
-    meta: { requiresAuth: true, roles: ['admin'] },
-  },
-  {
-    path: '/admin/users',
-    name: 'admin-users',
-    component: () => import('@/modules/admin/views/UsersView.vue'),
-    meta: { requiresAuth: true, roles: ['admin'] },
-  },
-  {
-    path: '/admin/users/new',
-    name: 'admin-user-create',
-    component: () => import('@/modules/admin/views/UserFormView.vue'),
-    meta: { requiresAuth: true, roles: ['admin'] },
-  },
-  {
-    path: '/admin/users/:id',
-    name: 'admin-user-detail',
-    component: () => import('@/modules/admin/views/UserDetailView.vue'),
-    props: true,
-    meta: { requiresAuth: true, roles: ['admin'] },
-  },
-  {
-    path: '/admin/users/:id/edit',
-    name: 'admin-user-edit',
-    component: () => import('@/modules/admin/views/UserFormView.vue'),
-    props: true,
-    meta: { requiresAuth: true, roles: ['admin'] },
-  },
 ]
 
 const router = createRouter({

@@ -34,7 +34,6 @@ describe('auth store', () => {
     expect(store.isAuthenticated).toBe(true)
     expect(store.role).toBe('landlord')
     expect(store.isLandlord).toBe(true)
-    expect(store.isAdmin).toBe(false)
     expect(store.isStudent).toBe(false)
   })
 
@@ -49,14 +48,14 @@ describe('auth store', () => {
   })
 
   it('login calls the auth service and stores the returned session', async () => {
-    authService.login.mockResolvedValue({ data: { user: { id: 2, role: 'admin' }, token: 'tok-2' } })
+    authService.login.mockResolvedValue({ data: { user: { id: 2, role: 'landlord' }, token: 'tok-2' } })
     const store = useAuthStore()
 
     const user = await store.login('a@b.com', 'secret')
 
     expect(authService.login).toHaveBeenCalledWith('a@b.com', 'secret')
-    expect(user).toEqual({ id: 2, role: 'admin' })
-    expect(store.isAdmin).toBe(true)
+    expect(user).toEqual({ id: 2, role: 'landlord' })
+    expect(store.isLandlord).toBe(true)
   })
 
   it('logout clears local session even if the server call fails', async () => {
